@@ -37,10 +37,12 @@ export function MainBanner({ slides }: { slides: MainBannerSlide[] }) {
   const next = slides[(index + 1) % count];
 
   return (
+    // 시안의 340 / 175 / 825 배치는 1440에서만 성립한다. 타이틀 컬럼(340px)과
+    // 40px 타이포는 고정하고, 줄어드는 폭은 간격 → 이미지 순으로 흡수시킨다.
     <section
       aria-label="메인 배너"
       aria-roledescription="carousel"
-      className="mx-auto flex w-full max-w-[1440px] flex-col gap-10 px-6 lg:flex-row lg:items-end lg:gap-[175px] lg:px-gutter"
+      className="mx-auto flex w-full max-w-[1440px] flex-col gap-10 px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-[60px] lg:px-gutter xl:gap-[120px]"
     >
       <div className="flex shrink-0 flex-col gap-[57px] pt-10 lg:w-[340px] lg:pt-20">
         <div className="flex flex-col items-start gap-9">
@@ -67,7 +69,7 @@ export function MainBanner({ slides }: { slides: MainBannerSlide[] }) {
 
       <div
         aria-live="polite"
-        className="relative aspect-[825/412] w-full lg:w-[825px]"
+        className="relative aspect-[825/412] w-full lg:min-w-0 lg:max-w-[825px] lg:flex-1"
       >
         {/* slide_img03 — node 148:1557 */}
         <BackdropSlide slide={previous} className="left-0" />
