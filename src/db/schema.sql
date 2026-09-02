@@ -1,0 +1,3 @@
+-- Gen.G Online Store — Supabase (PostgreSQL) 스키마
+-- 실제 테이블 정의는 db/migrations/ 의 마이그레이션으로만 반영한다.
+-- 이 파일은 현재 스키마의 참조용 스냅샷이다. (임의 테이블 생성 금지 — AGENTS.md §4)

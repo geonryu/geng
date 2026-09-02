@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* Gen.G Online Store — 디자인 토큰
+ * Figma: 젠지온라인리뉴얼 / 컴포넌트 모음 (node 148:2668)
+ * 파일에 Figma Variable이 정의되어 있지 않아, 시안에서 반복 사용되는 raw 값을 토큰화했다. */
+@theme {
+  /* color */
+  --color-ink: #151515; /* 기본 전경 / 활성 배경 */
+  --color-line: #e5e5e5; /* 카드·탭 테두리 */
+  --color-line-soft: #efefef; /* pill 탭 테두리 */
+  --color-surface-soft: #f6f6f6; /* pill 탭 비활성 배경 */
+  --color-control: #d9d9d9; /* 슬라이드 컨트롤 비활성 */
+  --color-on-dark-idle: #eaeaea; /* 어두운 배경 위 비활성 텍스트/바 */
+  --color-sale: #ff8a56; /* 할인율 */
+  --color-geng-gold: #d1b782; /* 로고 골드 */
+
+  /* radius */
+  --radius-button: 8px;
+  --radius-banner: 10px;
+  --radius-card: 15px;
+  --radius-pill: 20px;
+
+  /* layout */
+  --spacing-gutter: 50px; /* 시안 1440 기준 좌우 여백 */
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: var(--color-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), var(--font-noto-sans-kr);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
