@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
+import { Accordion } from "@/components/ui/accordion";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { ButtonGo } from "@/components/ui/button-go";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InfoStrip } from "@/components/ui/info-strip";
+import { NoticeBox } from "@/components/ui/notice-box";
+import { Price } from "@/components/ui/price";
+import { QuantityStepper } from "@/components/ui/quantity-stepper";
+import { SegmentedToggle } from "@/components/ui/segmented-toggle";
+import { SelectField } from "@/components/ui/select-field";
+import { SideNav } from "@/components/ui/side-nav";
+import { StatCard } from "@/components/ui/stat-card";
+import { SummaryBar } from "@/components/ui/summary-bar";
+import { BoxField } from "@/components/ui/text-field";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -22,15 +36,20 @@ import { Slogan } from "@/components/ui/slogan";
 import { SubBanner, SubBannerWide } from "@/components/ui/sub-banner";
 import { PillTabs, SegmentedTabs } from "@/components/ui/tabs";
 import {
+  InteractiveCheckbox,
+  InteractiveQuantityStepper,
+  InteractiveSegmentedToggle,
+  InteractiveTextField,
   InteractiveSlideBar,
   InteractiveSlideControls,
   InteractiveTabs,
+  InteractiveUnderlineTabs,
 } from "./interactive";
 import { Section, Specimen } from "./specimen";
 
 export const metadata: Metadata = {
   title: "컴포넌트 | Gen.G Admin",
-  description: "Figma 컴포넌트 시안을 옮긴 디자인 시스템 카탈로그",
+  description: "Figma 컴포넌트 모음 + 최종화면에서 도출한 디자인 시스템 카탈로그",
 };
 
 const NAV = [
@@ -46,10 +65,24 @@ const NAV = [
   { id: "product", label: "Product" },
   { id: "release", label: "Release" },
   { id: "banner", label: "Sub banner" },
+  { id: "breadcrumb", label: "Breadcrumb" },
+  { id: "button", label: "Button (신규)" },
+  { id: "form", label: "Form" },
+  { id: "toggle", label: "Segmented toggle" },
+  { id: "stepper", label: "Quantity" },
+  { id: "price", label: "Price" },
+  { id: "underline-tabs", label: "Underline tabs" },
+  { id: "accordion", label: "Accordion" },
+  { id: "notice", label: "Notice box" },
+  { id: "summary", label: "Summary bar" },
+  { id: "stat", label: "Stat card" },
+  { id: "info-strip", label: "Info strip" },
+  { id: "side-nav", label: "Side nav" },
 ];
 
 const COLORS = [
   { token: "ink", value: "#151515", swatch: "bg-ink" },
+  { token: "muted", value: "#666666", swatch: "bg-muted" },
   { token: "line", value: "#e5e5e5", swatch: "bg-line" },
   { token: "line-soft", value: "#efefef", swatch: "bg-line-soft" },
   { token: "surface-soft", value: "#f6f6f6", swatch: "bg-surface-soft" },
@@ -60,6 +93,7 @@ const COLORS = [
 ];
 
 const RADII = [
+  { token: "rounded-field", value: "5px", className: "rounded-field" },
   { token: "rounded-button", value: "8px", className: "rounded-button" },
   { token: "rounded-banner", value: "10px", className: "rounded-banner" },
   { token: "rounded-card", value: "15px", className: "rounded-card" },
@@ -95,7 +129,7 @@ const CURATION_TABS = [
 export default function ComponentsPage() {
   return (
     <div className="flex flex-1 flex-col bg-white">
-      <header className="sticky top-0 z-10 border-b border-line bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-10 border-b border-line bg-white">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-4 py-6 md:px-8 lg:px-gutter">
           <div className="flex items-center gap-3">
             <Logo className="size-9" />
@@ -104,7 +138,7 @@ export default function ComponentsPage() {
                 컴포넌트 카탈로그
               </h1>
               <p className="text-[13px] text-[#666]">
-                Figma · 젠지온라인리뉴얼 / 컴포넌트 모음 (148:2668)
+                Figma · 젠지온라인리뉴얼 — 컴포넌트 모음 (148:2668) + 최종화면 (277:5038)
               </p>
             </div>
           </div>
@@ -458,6 +492,344 @@ export default function ComponentsPage() {
                 imageAlt="GO TO GenRang"
                 dimmed
               />
+            </div>
+          </Specimen>
+        </Section>
+
+        {/* ── 최종화면(node 277:5038)에서 추가된 컴포넌트 ─────────────────── */}
+
+        <Section
+          id="breadcrumb"
+          title="Breadcrumb"
+          node="277:6073 · 277:6075"
+          description="최종화면 전 페이지 공통. 14px muted 텍스트에 16px export 셰브런을 끼운다. 시안은 마지막 항목도 muted라 현재 위치를 색으로 강조하지 않는다."
+        >
+          <Specimen label="2단계 · 3단계">
+            <div className="flex flex-col gap-4">
+              <Breadcrumb items={[{ label: "홈", href: "/" }, { label: "로그인" }]} />
+              <Breadcrumb
+                items={[
+                  { label: "홈", href: "/" },
+                  { label: "Pro Kit", href: "/pro" },
+                  { label: "2026 Pro Kit" },
+                ]}
+              />
+            </div>
+          </Specimen>
+        </Section>
+
+        <Section
+          id="button"
+          title="Button (신규 체계)"
+          node="277:7642 · 277:7699 · 277:7761~7765 · 277:6090"
+          description="최종화면에는 버튼이 Figma 컴포넌트로 묶여 있지 않아 화면에서 역으로 도출했다. tone 4종 × size 3종 조합이며, 기존 ButtonGo(148:2896)는 메인 배너 전용으로 남는다."
+        >
+          <Specimen label="size sm (30px) — 표·목록 안의 보조 동작">
+            <div className="flex flex-wrap items-center gap-4">
+              <Button size="sm" tone="solid">주문하기</Button>
+              <Button size="sm" tone="outline">찜하기</Button>
+              <Button size="sm" tone="outline">상품 추가하기</Button>
+              <Button size="sm" tone="muted">선택 상품 삭제</Button>
+            </div>
+          </Specimen>
+
+          <Specimen label="size md (45px) — 페이지 하단 주요 동작">
+            <div className="flex flex-wrap items-center gap-4">
+              <Button size="md" tone="outline" className="w-[267px]">계속 쇼핑하기</Button>
+              <Button size="md" tone="outline-strong" className="w-[267px]">선택상품 주문하기</Button>
+              <Button size="md" tone="solid" className="w-[267px]">전체상품 주문하기</Button>
+            </div>
+          </Specimen>
+
+          <Specimen label="size lg (45px / 16px bold) — 폼 제출">
+            <div className="flex max-w-[550px] flex-col gap-4">
+              <Button size="lg" tone="muted" fullWidth>로그인 (비활성)</Button>
+              <Button size="lg" tone="solid" fullWidth>로그인</Button>
+            </div>
+          </Specimen>
+        </Section>
+
+        <Section
+          id="form"
+          title="Form fields"
+          node="277:6086 · 277:8649 · 257:1234 · 257:1247"
+          description="언더라인 입력(TextField)·셀렉트(SelectField)·체크박스(Checkbox) 세 가지다. check01(원형)과 check02(사각)은 모서리만 다르고 체크 글리프를 공유해 shape prop 하나로 합쳤다."
+        >
+          <Specimen label="TextField — 언더라인 45px · 플로팅 라벨 (입력해 보세요)">
+            <InteractiveTextField />
+          </Specimen>
+
+          <Specimen label="BoxField — 45px 박스 (회원가입 폼)">
+            <div className="flex max-w-[550px] flex-col gap-4">
+              <BoxField placeholder="ID (영문소문자/숫자, 4~16자)" aria-label="아이디" />
+              <BoxField placeholder="이름 입력" aria-label="이름" />
+            </div>
+          </Specimen>
+
+          <Specimen label="SelectField — 상품 옵션">
+            <div className="max-w-[540px]">
+              <SelectField aria-label="옵션 선택" defaultValue="">
+                <option value="">- [필수] 옵션을 선택해주세요 -</option>
+                <option value="m">M</option>
+                <option value="l">L</option>
+              </SelectField>
+            </div>
+          </Specimen>
+
+          <Specimen label="Checkbox — active · deactive">
+            <div className="flex items-center gap-8">
+              <Checkbox shape="square" checked readOnly />
+              <Checkbox shape="square" readOnly />
+              <Checkbox shape="circle" checked readOnly />
+              <Checkbox shape="circle" readOnly />
+            </div>
+          </Specimen>
+
+          <Specimen label="동작 확인">
+            <InteractiveCheckbox />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="toggle"
+          title="Segmented toggle"
+          node="277:6080 · 277:7624"
+          description="2분할 45px 박스. 기존 SegmentedTabs(TAP_ver1)와 달리 바깥 모서리에만 5px 라운드를 주고 비활성 칸에 line 테두리를 남긴다."
+        >
+          <Specimen label="회원/비회원 · 국내배송/해외배송">
+            <div className="flex max-w-[570px] flex-col gap-6">
+              <SegmentedToggle
+                items={[
+                  { id: "member", label: "회원" },
+                  { id: "guest", label: "비회원" },
+                ]}
+                activeId="member"
+              />
+              <SegmentedToggle
+                items={[
+                  { id: "domestic", label: "국내배송", suffix: "(1)" },
+                  { id: "overseas", label: "해외배송", suffix: "(0)" },
+                ]}
+                activeId="domestic"
+              />
+            </div>
+          </Specimen>
+
+          <Specimen label="동작 확인">
+            <InteractiveSegmentedToggle />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="stepper"
+          title="Quantity stepper"
+          node="277:7676 · 277:8663"
+          description="30px 정사각 3칸. 가운데 칸은 좌우 테두리를 빼 이음매가 겹치지 않게 했다. 장바구니와 상품상세 옵션이 같은 컴포넌트를 쓴다."
+        >
+          <Specimen label="기본 · 최소 수량 도달">
+            <div className="flex items-center gap-8">
+              <QuantityStepper value={1} />
+              <QuantityStepper value={3} />
+            </div>
+          </Specimen>
+
+          <Specimen label="동작 확인">
+            <InteractiveQuantityStepper />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="price"
+          title="Price"
+          node="277:7670 · 277:8636"
+          description="시안은 숫자만 Bold, 단위는 한 단계 작은 Regular로 쓴다. 기존 ProductCard 안에 묶여 있던 표기를 꺼내 장바구니·상품상세가 함께 쓰도록 분리했다."
+        >
+          <Specimen label="sm · md · lg / 할인 표기">
+            <div className="flex flex-wrap items-end gap-12">
+              <Price amount="16,200" size="sm" />
+              <Price amount="189,000" size="md" />
+              <Price amount="189,000" size="lg" />
+              <Price
+                amount="16,200"
+                originalAmount="18,000"
+                size="sm"
+                align="center"
+              />
+            </div>
+          </Specimen>
+        </Section>
+
+        <Section
+          id="underline-tabs"
+          title="Underline tabs"
+          node="277:8600 · 277:5420"
+          description="상품상세의 상품설명 · 상품후기 · Q&A. 칸은 균등 분할하되 밑줄은 활성 라벨 폭만큼만 긋는다."
+        >
+          <Specimen label="동작 확인">
+            <InteractiveUnderlineTabs />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="accordion"
+          title="Accordion"
+          node="277:8617 · 277:8622 · 277:8627"
+          description="상품상세 하단 안내. 63px 행에 라벨과 셰브런을 양 끝으로 둔다. 시안에는 닫힌 상태만 있어 열린 상태는 같은 리듬으로 이어 붙였다."
+        >
+          <Specimen label="기본 (첫 항목 열림)">
+            <Accordion
+              defaultOpenId="delivery"
+              items={[
+                {
+                  id: "delivery",
+                  label: "배송안내",
+                  content: "배송비 3,000원 · 70,000원 이상 구매 시 무료배송입니다.",
+                },
+                { id: "exchange", label: "교환/반품 안내", content: "수령 후 7일 이내 신청 가능합니다." },
+                { id: "guide", label: "이용안내", content: "상품 이용 관련 안내가 들어간다." },
+              ]}
+            />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="notice"
+          title="Notice box"
+          node="277:7767"
+          description="surface-soft 배경 · 24px 패딩의 회색 안내 박스. 제목 14px Bold, 항목 13px에 ∙ 불릿을 붙인다."
+        >
+          <Specimen label="장바구니 이용안내">
+            <NoticeBox
+              title="장바구니 이용안내"
+              items={[
+                "장바구니와 관심상품을 이용하여 원하시는 상품만 주문하거나 관심상품으로 등록하실 수 있습니다.",
+                "해외배송 상품과 국내배송 상품은 함께 결제하실 수 없으니 장바구니 별로 따로 결제해 주시기 바랍니다.",
+                "해외배송 가능 상품의 경우 국내배송 장바구니에 담았다가 해외배송 장바구니로 이동하여 결제하실 수 있습니다.",
+              ]}
+            />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="summary"
+          title="Summary bar"
+          node="277:7730"
+          description="ink 테두리 한 겹 안에 3칸을 두고, 칸 경계 위에 45px 원형 기호(+, =)를 겹친다. 시안의 1140px 고정폭 대신 칸을 균등 분할했다."
+        >
+          <Specimen label="장바구니 합계">
+            <SummaryBar
+              cells={[
+                { label: "상품 총 금액", amount: "16,200" },
+                { label: "배송비", amount: "3,000" },
+                { label: "결제 예정 금액", amount: "19,200", emphasis: true },
+              ]}
+            />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="stat"
+          title="Stat card"
+          node="277:6450 · 277:6465 · 277:6478"
+          description="마이페이지 요약 카드. 아이콘이 ink + sale 2톤이라 currentColor로 열 수 없어 export SVG를 public/assets/icons에 커밋해 그대로 쓴다."
+        >
+          <Specimen label="총주문 · 쿠폰 · 총적립금">
+            <div className="grid gap-4 md:grid-cols-3">
+              <StatCard
+                iconSrc="/assets/icons/stat-orders.svg"
+                title="총주문"
+                values={[
+                  { amount: "0", unit: "원" },
+                  { amount: "0", unit: "회" },
+                ]}
+              />
+              <StatCard
+                iconSrc="/assets/icons/stat-coupon.svg"
+                title="쿠폰"
+                values={[{ amount: "0", unit: "장" }]}
+              />
+              <StatCard
+                iconSrc="/assets/icons/stat-points.svg"
+                title="총적립금"
+                values={[{ amount: "0", unit: "원" }]}
+              />
+            </div>
+          </Specimen>
+        </Section>
+
+        <Section
+          id="info-strip"
+          title="Info strip"
+          node="277:6492 · 277:6511"
+          description="line 테두리 한 겹에 98px 칸을 균등 분할한 가로 띠. 적립금 요약과 주문 상태 카운트가 제목/값 순서만 다르게 쓰므로 reverse prop으로 흡수했다."
+        >
+          <Specimen label="기본 — 제목이 위">
+            <InfoStrip
+              cells={[
+                { label: "가용적립금", value: "0원" },
+                { label: "사용적립금", value: "0원" },
+                { label: "예치금", value: "0원" },
+              ]}
+            />
+          </Specimen>
+
+          <Specimen label="reverse — 값이 위 (주문 상태 카운트)">
+            <InfoStrip
+              reverse
+              cells={[
+                { label: "입금전", value: "0" },
+                { label: "배송준비중", value: "0" },
+                { label: "배송중", value: "0" },
+                { label: "배송완료", value: "0" },
+                { label: "취소", value: "0" },
+                { label: "교환/반품", value: "0" },
+              ]}
+            />
+          </Specimen>
+        </Section>
+
+        <Section
+          id="side-nav"
+          title="Side nav"
+          node="277:6383 · 277:6420 · 277:6433"
+          description="마이페이지 좌측 250px 메뉴. 그룹 제목 16px Bold + 셰브런, 항목 14px에 12px 간격이다. 시안은 모든 그룹이 펼쳐진 상태이며 셰브런은 접기 어포던스다."
+        >
+          <Specimen label="쇼핑정보 카드 + 2개 그룹">
+            <div className="max-w-[250px]">
+              <SideNav
+                activeHref="/mypage/orders"
+                groups={[
+                  {
+                    id: "personal",
+                    title: "개인정보",
+                    items: [
+                      { label: "회원정보 수정", href: "/mypage/profile" },
+                      { label: "환불계좌관리", href: "/mypage/refund-account" },
+                      { label: "배송주소록 관리", href: "/mypage/addresses" },
+                      { label: "회원탈퇴", href: "/mypage/withdraw" },
+                    ],
+                  },
+                  {
+                    id: "shopping",
+                    title: "쇼핑정보",
+                    items: [
+                      { label: "주문/배송내역", href: "/mypage/orders" },
+                      { label: "취소/반품/교환 내역", href: "/mypage/claims" },
+                      { label: "나의 적립금", href: "/mypage/points" },
+                      { label: "할인쿠폰", href: "/mypage/coupons" },
+                      { label: "찜한상품", href: "/mypage/wishlist" },
+                      { label: "상품후기", href: "/mypage/reviews" },
+                      { label: "최근 본 상품", href: "/mypage/recent" },
+                    ],
+                  },
+                ]}
+              >
+                <div className="rounded-field bg-surface-soft px-5 py-6">
+                  <p className="text-center text-[16px] text-ink">
+                    <span className="font-bold">김젠랑</span>님의 쇼핑정보
+                  </p>
+                </div>
+              </SideNav>
             </div>
           </Specimen>
         </Section>

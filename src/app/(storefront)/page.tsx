@@ -12,22 +12,26 @@ import {
 } from "./main-page-data";
 
 /**
- * 메인 화면 — Figma 젠지온라인리뉴얼 / 화면 / 메인시안1_PC (node 150:3232)
- * 시안의 세로 리듬: 헤더 아래 70px → 배너 → 36px → Release → 100px 간격 섹션 → 푸터 위 70px.
+ * 메인 화면 — Figma 젠지온라인리뉴얼 / 최종화면 / 메인_PC (node 277:5039), 메인_MO (node 290:13054)
+ * 시안의 세로 리듬: 헤더 아래 16px → 배너 → 36px → Release → 섹션 간 56px → 푸터.
  */
 export default function StorefrontHomePage() {
   return (
-    <div className="flex flex-col gap-16 py-10 lg:gap-25 lg:py-[70px]">
+    <div className="flex flex-col gap-10 py-4 lg:gap-14 lg:py-4">
       <div className="flex flex-col gap-9">
         <MainBanner slides={MAIN_BANNER_SLIDES} />
         <ReleaseStrip items={RELEASE_ITEMS} />
       </div>
 
-      <ProductShowcase title="Most Popular" tabs={POPULAR_TABS} />
+      <ProductShowcase
+        title="Most Popular"
+        tabs={POPULAR_TABS}
+        variant="carousel"
+      />
 
       <SubBannerSection items={SUB_BANNER_ITEMS} />
 
-      <ProductShowcase title="Product" tabs={PRODUCT_TABS} />
+      <ProductShowcase title="Product" tabs={PRODUCT_TABS} variant="list" />
     </div>
   );
 }

@@ -14,7 +14,7 @@ export function SearchField({
       role="search"
       className={cn(
         // 폭은 호출부가 정한다. 시안(node 148:1462)의 236px은 PC 헤더에서만 쓰인다.
-        "flex w-full items-center justify-between gap-2 rounded-[2px] border border-[#666] bg-white px-3 py-2",
+        "flex w-full items-center justify-between gap-2 rounded-field border border-muted bg-white px-3 py-2",
         className,
       )}
     >
@@ -22,7 +22,7 @@ export function SearchField({
         type="search"
         placeholder={placeholder}
         aria-label="상품 검색"
-        className="min-w-0 flex-1 bg-transparent text-[14px] font-bold text-ink outline-none placeholder:text-[#666]"
+        className="min-w-0 flex-1 bg-transparent text-[14px] font-bold text-ink outline-none placeholder:text-muted"
       />
       <button type="submit" aria-label="검색" className="text-ink">
         <SearchIcon />

@@ -304,15 +304,181 @@ export function MenuIcon({ className }: IconProps) {
   );
 }
 
+/**
+ * 닫기 — 최종화면의 export 벡터(24×24 안에 10.48 글리프를 중앙 배치).
+ * 장바구니 행 삭제(node 277:7709)와 모바일 GNB 토글이 같은 글리프를 쓴다.
+ */
 export function CloseIcon({ className }: IconProps) {
   return (
     <IconRoot className={className}>
-      <path
-        d="M6 6l12 12M18 6L6 18"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-      />
+      <g transform="translate(6.64 6.88)">
+        <path
+          d="M10.3324 0.151172C10.1309 -0.0503906 9.80274 -0.0503906 9.59649 0.151172L5.2418 4.50586L0.88711 0.151172C0.685547 -0.0503906 0.357422 -0.0503906 0.151172 0.151172C-0.0503906 0.352734 -0.0503906 0.685547 0.151172 0.88711L4.50586 5.2418L0.15586 9.5918C-0.0457028 9.79336 -0.0457028 10.1262 0.15586 10.3277C0.258985 10.4309 0.390235 10.4777 0.521485 10.4777C0.652735 10.4777 0.788673 10.4262 0.88711 10.3277L5.2418 5.97305L9.59649 10.3277C9.69961 10.4309 9.83086 10.4777 9.96211 10.4777C10.0934 10.4777 10.2293 10.4262 10.3277 10.3277C10.5293 10.1262 10.5293 9.79336 10.3277 9.5918L5.97305 5.23711L10.3277 0.882422C10.534 0.68086 10.534 0.352734 10.3324 0.151172Z"
+          fill="currentColor"
+        />
+      </g>
     </IconRoot>
+  );
+}
+
+/* ── 최종화면(node 277:5038)에서 추가된 아이콘 ────────────────────────────── */
+
+/**
+ * 브레드크럼 셰브런 — node 277:6075 (right-chevron_6020205).
+ * 16×16 박스 안에 5.46×9.36 export 벡터를 시안 위치 그대로 배치했다.
+ */
+export function ChevronRightIcon({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      className={cn("size-4 shrink-0", className)}
+    >
+      <g transform="translate(5.27 3.32)">
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M0.157946 0.864411C0.157946 0.864411 3.14399 3.66309 4.23024 4.68112L0.157946 8.49783C-0.0434409 8.68653 -0.0535833 9.00312 0.135204 9.20441C0.324044 9.40565 0.640816 9.41579 0.842151 9.22709L5.30352 5.04578C5.40432 4.95126 5.46152 4.81925 5.46152 4.68112C5.46152 4.54299 5.40432 4.41098 5.30352 4.31646L0.842151 0.135144C0.640816 -0.0535551 0.324044 -0.0434123 0.135204 0.157831C-0.0535833 0.359123 -0.0434409 0.675712 0.157946 0.864411Z"
+          fill="currentColor"
+        />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 아코디언 · 셀렉트 셰브런 — node 277:6423 / 277:8652.
+ * 시안은 export 벡터가 아니라 둥근 끝을 가진 선분 두 개를 ±45°로 붙인 도형이라,
+ * 같은 구성(길이 10.9 · 두께 1.8 · round cap)을 stroke로 재현했다.
+ */
+export function ChevronToggleIcon({
+  direction = "down",
+  className,
+}: IconProps & { direction?: "down" | "up" }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      className={cn("size-4 shrink-0", className)}
+    >
+      <path
+        d={direction === "down" ? "M4 5.5L8 10.5L12 5.5" : "M4 10.5L8 5.5L12 10.5"}
+        stroke="currentColor"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** 수량 감소 — node 277:7679 (remove_17422740) */
+export function MinusIcon({ className }: IconProps) {
+  return (
+    <IconRoot className={className}>
+      <g transform="translate(6.15 11.73)">
+        <path
+          d="M0.515625 0C0.229688 0 0 0.229688 0 0.515625C0 0.801562 0.229688 1.03125 0.515625 1.03125H11.2125C11.4984 1.03125 11.7281 0.801562 11.7281 0.515625C11.7281 0.229688 11.4984 0 11.2125 0H0.515625Z"
+          fill="currentColor"
+        />
+      </g>
+    </IconRoot>
+  );
+}
+
+/** 수량 증가 — node 277:7685 (business_17422739) */
+export function PlusIcon({ className }: IconProps) {
+  return (
+    <IconRoot className={className}>
+      <g transform="translate(5.89 5.6)">
+        <path
+          d="M6.39847 12.8016C6.67972 12.8016 6.90941 12.5719 6.90941 12.2906V6.91406H12.2813C12.5625 6.91406 12.7922 6.68438 12.7922 6.40313C12.7922 6.12188 12.5625 5.89219 12.2813 5.89219H6.90941V0.510938C6.90941 0.229688 6.67972 0 6.39847 0C6.11722 0 5.88754 0.229688 5.88754 0.510938V5.8875H0.510974C0.229724 5.8875 0 6.11719 0 6.39844C0 6.67969 0.229724 6.90938 0.510974 6.90938H5.88285V12.2859C5.88285 12.5719 6.11254 12.8016 6.39847 12.8016Z"
+          fill="currentColor"
+        />
+      </g>
+    </IconRoot>
+  );
+}
+
+/**
+ * 체크 표시 — node 257:1235 외. 20×20 박스 기준 export 벡터.
+ * Checkbox 안에서만 쓰이며 색은 currentColor로 연다.
+ */
+export function CheckMarkIcon({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      className={cn("size-5 shrink-0", className)}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M15.5893 6.13488C15.9147 6.46032 15.9147 6.98796 15.5893 7.31339L9.03753 13.8651C8.71209 14.1906 8.18446 14.1906 7.85902 13.8651L4.41074 10.4168C4.08531 10.0914 4.08531 9.56377 4.41074 9.23833C4.73618 8.91289 5.26382 8.91289 5.58926 9.23833L8.44828 12.0974L14.4107 6.13488C14.7362 5.80945 15.2638 5.80945 15.5893 6.13488Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/**
+ * 합계 바 연결 기호 — node 277:7751 / 277:7755 (45px 원형 + · =).
+ * 원 배경은 흰색 · 테두리 line, 글리프는 currentColor다.
+ */
+function SummaryGlyph({
+  className,
+  children,
+}: IconProps & { children: React.ReactNode }) {
+  return (
+    <svg
+      viewBox="0 0 45 45"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      className={cn("size-[45px] shrink-0", className)}
+    >
+      <circle
+        cx="22.5"
+        cy="22.5"
+        r="22"
+        fill="var(--background)"
+        stroke="var(--color-line)"
+      />
+      {children}
+    </svg>
+  );
+}
+
+/** 합계 바 — 더하기 원 (node 277:7751) */
+export function CirclePlusIcon({ className }: IconProps) {
+  return (
+    <SummaryGlyph className={className}>
+      <path
+        d="M22.5039 28.9007C22.7852 28.9007 23.0149 28.671 23.0149 28.3897V23.0132H28.3868C28.668 23.0132 28.8977 22.7835 28.8977 22.5022C28.8977 22.221 28.668 21.9913 28.3868 21.9913H23.0149V16.6101C23.0149 16.3288 22.7852 16.0991 22.5039 16.0991C22.2227 16.0991 21.993 16.3288 21.993 16.6101V21.9866H16.6164C16.3352 21.9866 16.1055 22.2163 16.1055 22.4976C16.1055 22.7788 16.3352 23.0085 16.6164 23.0085H21.9883V28.3851C21.9883 28.671 22.218 28.9007 22.5039 28.9007Z"
+        fill="currentColor"
+      />
+    </SummaryGlyph>
+  );
+}
+
+/** 합계 바 — 등호 원 (node 277:7755) */
+export function CircleEqualsIcon({ className }: IconProps) {
+  return (
+    <SummaryGlyph className={className}>
+      <path
+        d="M28.3937 20.4841H16.6095C16.3299 20.4841 16.1016 20.7125 16.1016 20.992C16.1016 21.2716 16.3299 21.4999 16.6095 21.4999H28.3937C28.6732 21.4999 28.9016 21.2716 28.9016 20.992C28.9016 20.7125 28.6732 20.4841 28.3937 20.4841Z"
+        fill="currentColor"
+      />
+      <path
+        d="M28.3937 23.4999H16.6095C16.3299 23.4999 16.1016 23.7283 16.1016 24.0078C16.1016 24.2874 16.3299 24.5157 16.6095 24.5157H28.3937C28.6732 24.5157 28.9016 24.2874 28.9016 24.0078C28.9016 23.7329 28.6732 23.4999 28.3937 23.4999Z"
+        fill="currentColor"
+      />
+    </SummaryGlyph>
   );
 }

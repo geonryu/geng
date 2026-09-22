@@ -3,7 +3,10 @@
 import { cn } from "@/lib/utils/cn";
 import { ChevronIcon } from "./icons";
 
-/** BUTTON_slide(L/R) — node 148:2057 / 148:2074 */
+/**
+ * BUTTON_slide(L/R) — node 148:2057 / 148:2074
+ * large 45px · small 24px · mini 16px(Variant5, 최종화면 메인 배너 진행 컨트롤 node 181:560)
+ */
 export function SlideButton({
   direction,
   size = "large",
@@ -13,13 +16,14 @@ export function SlideButton({
   className,
 }: {
   direction: "left" | "right";
-  size?: "large" | "small";
+  size?: "large" | "small" | "mini";
   active?: boolean;
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
 }) {
   const isLarge = size === "large";
+  const isMini = size === "mini";
   return (
     <button
       type="button"
@@ -27,8 +31,9 @@ export function SlideButton({
       disabled={disabled}
       aria-label={direction === "left" ? "이전" : "다음"}
       className={cn(
-        "inline-flex items-center justify-center rounded-full border-2 bg-white transition-colors",
-        isLarge ? "size-[45px]" : "size-6",
+        "inline-flex items-center justify-center rounded-full bg-white transition-colors",
+        isMini ? "border" : "border-2",
+        isLarge ? "size-[45px]" : isMini ? "size-4" : "size-6",
         active
           ? "border-ink text-ink"
           : "border-control text-control hover:border-ink hover:text-ink",
@@ -37,7 +42,13 @@ export function SlideButton({
     >
       <ChevronIcon
         direction={direction}
-        className={isLarge ? "h-[17px] w-[10px]" : "h-[9px] w-[6px]"}
+        className={
+          isLarge
+            ? "h-[17px] w-[10px]"
+            : isMini
+              ? "h-[6px] w-[4px]"
+              : "h-[9px] w-[6px]"
+        }
       />
     </button>
   );

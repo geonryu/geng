@@ -11,16 +11,21 @@ export type TabItem = {
  * TAP_ver1 — node 148:2268(3분할) / 148:1963(4분할).
  * 시안은 1340px 고정폭이지만 분할 수만 다른 같은 구조라 하나의 컴포넌트로 통합하고,
  * 반응형을 위해 컨테이너 폭을 균등 분할한다.
+ *
+ * size: "lg" 50px — 컴포넌트 모음 원형
+ *       "sm" 36px — 최종화면 메인이 쓰는 높이 (node 277:5153 · 277:5241)
  */
 export function SegmentedTabs({
   items,
   activeId,
   onSelect,
+  size = "lg",
   className,
 }: {
   items: TabItem[];
   activeId: string;
   onSelect?: (id: string) => void;
+  size?: "lg" | "sm";
   className?: string;
 }) {
   return (
@@ -28,7 +33,8 @@ export function SegmentedTabs({
       role="tablist"
       className={cn(
         // 좁은 화면에서는 라벨이 잘리는 대신 가로 스크롤로 넘긴다.
-        "flex h-[50px] w-full items-stretch overflow-x-auto",
+        "flex w-full items-stretch overflow-x-auto",
+        size === "lg" ? "h-[50px]" : "h-9",
         className,
       )}
     >
@@ -61,22 +67,34 @@ export function SegmentedTabs({
   );
 }
 
-/** TAP_ver2 — node 148:2999 (pill 형태) */
+/**
+ * TAP_ver2 — node 148:2999 (pill 형태)
+ *
+ * variant: "soft"    — 컴포넌트 모음 원형 (surface-soft 배경, 16px)
+ *          "outline" — 최종화면 모바일 탭 (흰 배경 + line 테두리, 14px, node 290:13127)
+ */
 export function PillTabs({
   items,
   activeId,
   onSelect,
+  variant = "soft",
   className,
 }: {
   items: TabItem[];
   activeId: string;
   onSelect?: (id: string) => void;
+  variant?: "soft" | "outline";
   className?: string;
 }) {
+  const isOutline = variant === "outline";
   return (
     <div
       role="tablist"
-      className={cn("flex flex-wrap items-center gap-2", className)}
+      className={cn(
+        "flex items-center",
+        isOutline ? "gap-[6px]" : "flex-wrap gap-2",
+        className,
+      )}
     >
       {items.map((item) => {
         const isActive = item.id === activeId;
@@ -88,10 +106,20 @@ export function PillTabs({
             aria-selected={isActive}
             onClick={() => onSelect?.(item.id)}
             className={cn(
-              "rounded-pill text-[16px] transition-colors",
-              isActive
-                ? "bg-ink px-[19px] py-[9px] font-bold text-white"
-                : "border border-line-soft bg-surface-soft px-[18px] py-[8px] text-ink",
+              "rounded-pill whitespace-nowrap transition-colors",
+              isOutline
+                ? cn(
+                    "px-3 py-[7.5px] text-[14px]",
+                    isActive
+                      ? "bg-ink font-medium text-white"
+                      : "border border-line bg-white text-ink",
+                  )
+                : cn(
+                    "text-[16px]",
+                    isActive
+                      ? "bg-ink px-[19px] py-[9px] font-bold text-white"
+                      : "border border-line-soft bg-surface-soft px-[18px] py-[8px] text-ink",
+                  ),
             )}
           >
             {item.label}

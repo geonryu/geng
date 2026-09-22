@@ -3,187 +3,271 @@ import type {
   ReleaseItem,
   SubBannerItem,
 } from "@/features/content/types";
-import type { ShowcaseProduct, ShowcaseTab } from "@/features/products/types";
+import type { ShowcaseTab } from "@/features/products/types";
 
 /**
- * 메인시안1_PC(node 150:3232)의 배치 데이터.
- * 지금은 시안 값을 그대로 옮긴 상수이고, Supabase 연동 시 features/*의 queries로 대체한다.
- * 텍스트·이미지는 시안에 있는 것만 사용했고, 시안이 정의하지 않은 부분은 주석으로 표시했다.
+ * 메인 화면 목업 데이터 — Figma 젠지온라인리뉴얼 / 최종화면 / 메인_PC (node 277:5039)
+ * 실제 데이터는 Phase 1에서 채널 read-model과 진열 규칙이 붙으면 대체된다.
+ * 여기 값은 시안 텍스트를 그대로 옮긴 것이다.
  */
 
+/** main_banner — node 277:5085 */
 export const MAIN_BANNER_SLIDES: MainBannerSlide[] = [
   {
     id: "uniform",
     titleLines: ["2026 2nd Official", "Player Uniform"],
     subtitle: "SHOW YOUR LIGHT",
-    href: "/pro",
-    imageSrc: "/assets/images/main/slide-uniform.png",
-    imageAlt: "2026 2nd 오피셜 플레이어 유니폼을 입은 선수단",
+    href: "/products/2026-2nd-official-player-uniform",
+    imageSrc: "/assets/images/main/banner/slide-01-uniform.png",
+    imageAlt: "2026 2nd Official Player Uniform을 입은 선수들",
   },
-  // 시안은 1번 슬라이드의 카피만 정의한다. 아래 두 장은 뒤에 겹쳐 보이는 이미지라
-  // 카피가 없어, 이미지에 맞춘 임시 문구를 넣었다.
   {
-    id: "lightstick",
-    titleLines: ["Official", "Light Stick"],
-    subtitle: "SHOW YOUR LIGHT",
-    href: "/shop",
-    imageSrc: "/assets/images/main/slide-lightstick.png",
-    imageAlt: "젠지 공식 응원봉 두 종",
+    id: "genbong",
+    titleLines: ["GenBong"],
+    subtitle: "승리의 현장을 직접 밝혀주세요",
+    href: "/products/genbong",
+    imageSrc: "/assets/images/main/banner/slide-02-genbong.png",
+    imageAlt: "응원봉 GenBong",
+  },
+  {
+    id: "muffler",
+    titleLines: ["Gen.G 2026 Muffler #1"],
+    subtitle: "NOW AVAILABLE",
+    href: "/products/2026-muffler-1",
+    imageSrc: "/assets/images/main/banner/slide-03-muffler.png",
+    imageAlt: "Gen.G 2026 Muffler #1",
   },
   {
     id: "genrang-goods",
-    titleLines: ["GenRang", "Goods Collection"],
-    subtitle: "SHOW YOUR LIGHT",
+    titleLines: ["GenRang merch"],
+    subtitle: "마스코트 젠랑이 아이템",
     href: "/genrang",
-    imageSrc: "/assets/images/main/slide-genrang-goods.png",
-    imageAlt: "마스코트 젠랑이 키링과 뱃지",
+    imageSrc: "/assets/images/main/banner/slide-04.png",
+    imageAlt: "마스코트 젠랑이 굿즈",
   },
 ];
 
+/** Release — node 277:5118 */
 export const RELEASE_ITEMS: ReleaseItem[] = [
   {
-    id: "1st-uniform",
+    id: "uniform",
     label: "2026 1st Official Uniform",
     title: "키링 증정 이벤트 진행중!",
-    href: "/pro",
-    imageSrc: "/assets/images/main/release-1st-uniform.png",
-    imageAlt: "2026 1st 오피셜 유니폼",
+    href: "/events/uniform-keyring",
+    imageSrc: "/assets/images/main/release/uniform.png",
+    imageAlt: "2026 1st Official Uniform",
   },
   {
-    id: "genrang-merch",
+    id: "genrang",
     label: "GenRang merch",
     title: "마스코트 젠랑이 아이템",
     href: "/genrang",
-    imageSrc: "/assets/images/main/release-genrang.png",
-    imageAlt: "젠랑이 굿즈",
+    imageSrc: "/assets/images/main/release/genrang.png",
+    imageAlt: "마스코트 젠랑이 아이템",
   },
   {
     id: "musinsa",
     label: "✨ Fresh Drop! with MUSINSA",
     title: "무신사 콜라보 제품 판매중!",
-    href: "/shop",
-    imageSrc: "/assets/images/main/release-musinsa.png",
-    imageAlt: "무신사 콜라보 후디",
+    href: "/collabs/musinsa",
+    imageSrc: "/assets/images/main/release/musinsa.png",
+    imageAlt: "무신사 콜라보 제품",
   },
   {
     id: "membership",
     label: "2026 Membership",
     title: "멤버십 구경하러 가기",
     href: "/membership",
-    imageSrc: "/assets/images/main/release-membership.png",
-    imageAlt: "2026 멤버십",
+    imageSrc: "/assets/images/main/release/membership.png",
+    imageAlt: "2026 Membership",
+  },
+];
+
+/** 서브 배너 — node 277:5199 / 277:5217 */
+const GENRANG_PICKS = [
+  {
+    id: "genrang-mini-bag-keyring",
+    imageSrc: "/assets/images/main/subbanner/genrang-minibag.png",
+    title: "GenRang Mini Bag Keyring",
+    price: "25,000원",
+  },
+  {
+    id: "genrang-cherry-memo-pad",
+    imageSrc: "/assets/images/main/subbanner/genrang-memopad.png",
+    title: "GenRang Cherry blossom Memo Pad",
+    price: "8,000원",
   },
 ];
 
 export const SUB_BANNER_ITEMS: SubBannerItem[] = [
   {
     id: "genrang",
-    title: "GO TO GenRang",
     href: "/genrang",
-    imageSrc: "/assets/images/main/subbanner-genrang.png",
-    imageAlt: "GO TO GenRang 기획전",
+    imageSrc: "/assets/images/main/subbanner/genrang.png",
+    imageAlt: "GO TO GenRang — 젠랑이의 귀여움 놓치지 마세요",
+    products: GENRANG_PICKS,
   },
   {
     id: "slogan",
-    title: "GEN.G’S SLOGAN",
-    href: "/about",
-    imageSrc: "/assets/images/main/subbanner-slogan.png",
-    imageAlt: "젠지 슬로건 기획전",
+    href: "/slogan",
+    imageSrc: "/assets/images/main/subbanner/slogan.png",
+    imageAlt: "GEN.G’S SLOGAN — 젠지의 슬로건",
+    products: GENRANG_PICKS.map((product) => ({
+      ...product,
+      id: `slogan-${product.id}`,
+    })),
   },
 ];
 
-const POPULAR_PRODUCTS: ShowcaseProduct[] = [
+/** Most Popular — node 277:5147 */
+const POPULAR_PRODUCTS = [
   {
     id: "player-jacket",
     title: "2026 2nd Official Player Jacket",
     price: "189,000원",
-    href: "/product/player-jacket",
-    imageSrc: "/assets/images/main/jacket-cream.png",
-    imageAlt: "2026 2nd 오피셜 플레이어 자켓",
+    href: "/products/player-jacket",
+    imageSrc: "/assets/images/main/popular/jacket.png",
+    imageAlt: "2026 2nd Official Player Jacket",
   },
   {
     id: "player-jersey",
     title: "2026 2nd Official Player Jersey",
     price: "99,000원",
-    href: "/product/player-jersey",
-    imageSrc: "/assets/images/main/jersey-cream.png",
-    imageAlt: "2026 2nd 오피셜 플레이어 저지",
+    href: "/products/player-jersey",
+    imageSrc: "/assets/images/main/popular/jersey.png",
+    imageAlt: "2026 2nd Official Player Jersey",
   },
   {
-    id: "marking-kit-lol",
+    id: "marking-lol",
     title: "2026 2nd Official Player Self Marking Kit (LOL)",
     price: "27,000원",
-    href: "/product/marking-kit-lol",
-    imageSrc: "/assets/images/main/marking-kit-lol.png",
-    imageAlt: "LOL 셀프 마킹 키트",
-    titleLines: 2,
+    href: "/products/marking-kit-lol",
+    imageSrc: "/assets/images/main/popular/marking-lol.png",
+    imageAlt: "2026 2nd Official Player Self Marking Kit (LOL)",
+    titleLines: 2 as const,
   },
   {
-    id: "marking-kit-val",
+    id: "marking-val",
     title: "2026 2nd Official Player Self Marking Kit (VAL)",
     price: "27,000원",
-    href: "/product/marking-kit-val",
-    imageSrc: "/assets/images/main/marking-kit-val.png",
-    imageAlt: "VALORANT 셀프 마킹 키트",
-    titleLines: 2,
+    href: "/products/marking-kit-val",
+    imageSrc: "/assets/images/main/popular/marking-val.png",
+    imageAlt: "2026 2nd Official Player Self Marking Kit (VAL)",
+    titleLines: 2 as const,
   },
-];
-
-const PRODUCT_PRODUCTS: ShowcaseProduct[] = [
   {
-    id: "best-jacket",
-    title: "2026 2nd Official Player Jacket",
+    id: "jersey-black",
+    title: "2026 1st Official Player Jersey (Black)",
     price: "99,000원",
-    href: "/product/player-jacket",
-    imageSrc: "/assets/images/main/jersey-cream.png",
-    imageAlt: "2026 2nd 오피셜 플레이어 자켓",
-  },
-  {
-    id: "best-jersey",
-    title: "2026 2nd Official Player Jersey",
-    price: "27,900원",
-    href: "/product/player-jersey",
-    imageSrc: "/assets/images/main/phone-case.png",
-    imageAlt: "2026 2nd 오피셜 플레이어 저지",
-  },
-  {
-    id: "best-marking-kit-lol",
-    title: "2026 2nd Official Player Self Marking Kit (LOL)",
-    price: "27,000원",
-    href: "/product/marking-kit-lol",
-    imageSrc: "/assets/images/main/marking-kit-lol.png",
-    imageAlt: "LOL 셀프 마킹 키트",
-    titleLines: 2,
-  },
-  {
-    id: "best-marking-kit-val",
-    title: "2026 2nd Official Player Self Marking Kit (VAL)",
-    price: "27,000원",
-    href: "/product/marking-kit-val",
-    imageSrc: "/assets/images/main/marking-kit-val.png",
-    imageAlt: "VALORANT 셀프 마킹 키트",
-    titleLines: 2,
+    href: "/products/jersey-black",
+    imageSrc: "/assets/images/main/popular/jersey-black.png",
+    imageAlt: "2026 1st Official Player Jersey (Black)",
+    titleLines: 2 as const,
   },
 ];
 
-/** 시안에는 탭별 상품 목록이 없다. 연동 전까지는 모든 탭이 같은 목록을 보여준다. */
 export const POPULAR_TABS: ShowcaseTab[] = [
   { id: "pro-kit", label: "2026 PRO KIT", products: POPULAR_PRODUCTS },
-  {
-    id: "cheering-gear",
-    label: "CHEERING GEAR",
-    products: POPULAR_PRODUCTS,
-  },
+  { id: "cheering", label: "CHEERING GEAR", products: POPULAR_PRODUCTS },
   { id: "genrang", label: "GENRANG", products: POPULAR_PRODUCTS },
+  { id: "collectibles", label: "COLLECTIBLES", products: POPULAR_PRODUCTS },
+];
+
+/** Product — node 277:5235 (5칸 × 2줄) */
+const PRODUCT_GRID = [
   {
-    id: "collectibles",
-    label: "COLLECTIBLES",
-    products: POPULAR_PRODUCTS,
+    id: "keycap-keyring",
+    title: "[GenRang x Kumdori] Keycap Keyring(Character)",
+    price: "15,000원",
+    href: "/products/keycap-keyring",
+    imageSrc: "/assets/images/main/product/keycap-keyring.png",
+    imageAlt: "[GenRang x Kumdori] Keycap Keyring",
+    titleLines: 2 as const,
+  },
+  {
+    id: "libilly-tshirt",
+    title: "2024 Gen.G x LIBILLY GenRang Flag T-Shirt",
+    price: "34,300원",
+    href: "/products/libilly-tshirt",
+    imageSrc: "/assets/images/main/product/libilly-tshirt.png",
+    imageAlt: "2024 Gen.G x LIBILLY GenRang Flag T-Shirt",
+    titleLines: 2 as const,
+    sale: { rate: "30%", originalPrice: "49,000원" },
+  },
+  {
+    id: "genrang-cushion",
+    title: "GenRang Cushion",
+    price: "15,000원",
+    href: "/products/genrang-cushion",
+    imageSrc: "/assets/images/main/product/genrang-cushion.png",
+    imageAlt: "GenRang Cushion",
+    sale: { rate: "40%", originalPrice: "25,000원" },
+  },
+  {
+    id: "ruler-keyring",
+    title: "Ruler 10th Anniversary Metal Keyring",
+    price: "25,000원",
+    href: "/products/ruler-keyring",
+    imageSrc: "/assets/images/main/product/ruler-keyring.png",
+    imageAlt: "Ruler 10th Anniversary Metal Keyring",
+    titleLines: 2 as const,
+  },
+  {
+    id: "basic-socks",
+    title: "GEN.G BASIC SOCKS BLACK",
+    price: "5,000원",
+    href: "/products/basic-socks",
+    imageSrc: "/assets/images/main/product/basic-socks.png",
+    imageAlt: "GEN.G BASIC SOCKS BLACK",
+  },
+  {
+    id: "nordvpn-marking-kit",
+    title: "2026 Gen.G Self Marking Kit (NordVPN)",
+    price: "5,000원",
+    href: "/products/nordvpn-marking-kit",
+    imageSrc: "/assets/images/main/product/nordvpn-marking-kit.png",
+    imageAlt: "2026 Gen.G Self Marking Kit (NordVPN)",
+    titleLines: 2 as const,
+  },
+  {
+    id: "lck-cup-keyring",
+    title: "2026 LCK CUP Champions Metal Keyring",
+    price: "22,000원",
+    href: "/products/lck-cup-keyring",
+    imageSrc: "/assets/images/main/product/lck-cup-keyring.png",
+    imageAlt: "2026 LCK CUP Champions Metal Keyring",
+    titleLines: 2 as const,
+  },
+  {
+    id: "genrang-doll-mancity",
+    title: "GenRang Doll Keyring(ManCity ver.)",
+    price: "30,000원",
+    href: "/products/genrang-doll-mancity",
+    imageSrc: "/assets/images/main/product/genrang-doll-mancity.png",
+    imageAlt: "GenRang Doll Keyring (ManCity ver.)",
+    titleLines: 2 as const,
+  },
+  {
+    id: "ruler-tshirt",
+    title: "Ruler 10th Anniversary T-Shirt",
+    price: "35,000원",
+    href: "/products/ruler-tshirt",
+    imageSrc: "/assets/images/main/product/ruler-tshirt.png",
+    imageAlt: "Ruler 10th Anniversary T-Shirt",
+  },
+  {
+    id: "ruler-acrylic-stand",
+    title: "Ruler 10th Anniversary Acrylic Stand",
+    price: "20,000원",
+    href: "/products/ruler-acrylic-stand",
+    imageSrc: "/assets/images/main/product/ruler-acrylic-stand.png",
+    imageAlt: "Ruler 10th Anniversary Acrylic Stand",
+    titleLines: 2 as const,
   },
 ];
 
 export const PRODUCT_TABS: ShowcaseTab[] = [
-  { id: "best", label: "BEST", products: PRODUCT_PRODUCTS },
-  { id: "mds-pick", label: "MD's PICK", products: PRODUCT_PRODUCTS },
-  { id: "new", label: "NEW", products: PRODUCT_PRODUCTS },
+  { id: "best", label: "BEST", products: PRODUCT_GRID },
+  { id: "md-pick", label: "MD’s PICK", products: PRODUCT_GRID },
+  { id: "new", label: "NEW", products: PRODUCT_GRID },
 ];

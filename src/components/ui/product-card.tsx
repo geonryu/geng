@@ -45,13 +45,15 @@ export function ProductCard({
       <div
         className={cn(
           "flex flex-col text-ink",
-          titleLines === 1 && !sale ? "gap-6" : "gap-2",
+          // 모바일 카드는 제목이 2줄로 흐르므로 간격을 좁게 둔다 (node 290:13142).
+          titleLines === 1 && !sale ? "gap-2 lg:gap-6" : "gap-2",
         )}
       >
         <p
           className={cn(
             "text-[14px] font-medium",
-            titleLines === 2 ? "line-clamp-2" : "truncate",
+            // 좁은 화면에서는 한 줄 시안이라도 잘라내지 않고 두 줄까지 흘린다.
+            titleLines === 2 ? "line-clamp-2" : "line-clamp-2 lg:truncate",
           )}
         >
           {title}

@@ -1,103 +1,219 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 
+import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/ui/product-card";
+import { ProductListRow } from "@/components/ui/product-list-row";
 import { SlideButton, SlideDots } from "@/components/ui/slide-controls";
-import { SegmentedTabs } from "@/components/ui/tabs";
-import type { ShowcaseTab } from "../types";
+import { PillTabs, SegmentedTabs } from "@/components/ui/tabs";
+import type { ShowcaseProduct, ShowcaseTab } from "@/features/products/types";
+import { cn } from "@/lib/utils/cn";
 
 /**
- * Most Popular — node 148:2310 / Product — node 148:2347
- * 두 섹션은 타이틀·탭 개수만 다른 같은 구조라 하나의 컴포넌트로 통합했다.
- * 시안은 1340px 안에 244px 카드 4장(간격 55px)을 두고 좌우 99px을 슬라이드 버튼에 내준다.
+ * 상품 진열 섹션 — node 277:5147 (Most Popular) · 277:5235 (Product)
+ *
+ * 두 섹션은 제목 + 36px 분할 탭 + 상품 진열이라는 뼈대를 공유하고, 진열 방식만 다르다.
+ *   carousel — PC는 5칸 한 페이지 + 하단 슬라이드 컨트롤, MO는 카드 가로 스크롤
+ *   list     — PC는 5칸 × 2줄 그리드, MO는 5행짜리 목록을 열 단위로 가로 스크롤 (node 290:13242)
  */
-const PAGE_SIZE = 4;
+
+/** 시안의 한 줄 = 5칸 */
+const COLUMNS = 5;
 
 export function ProductShowcase({
   title,
   tabs,
+  variant = "list",
 }: {
   title: string;
   tabs: ShowcaseTab[];
+  variant?: "carousel" | "list";
 }) {
-  const [activeId, setActiveId] = useState(tabs[0].id);
+  const [activeId, setActiveId] = useState(tabs[0]?.id ?? "");
   const [page, setPage] = useState(0);
 
   const activeTab = tabs.find((tab) => tab.id === activeId) ?? tabs[0];
-  const pageCount = Math.max(
-    1,
-    Math.ceil(activeTab.products.length / PAGE_SIZE),
-  );
-  const safePage = Math.min(page, pageCount - 1);
-  const visible = activeTab.products.slice(
-    safePage * PAGE_SIZE,
-    safePage * PAGE_SIZE + PAGE_SIZE,
-  );
+  if (!activeTab) return null;
 
-  function selectTab(id: string) {
+  const products = activeTab.products;
+  const pageCount = Math.max(1, Math.ceil(products.length / COLUMNS));
+  const safePage = Math.min(page, pageCount - 1);
+
+  const selectTab = (id: string) => {
     setActiveId(id);
     setPage(0);
+  };
+
+  return (
+    <section className="flex flex-col gap-4">
+      <Container className="px-5 lg:px-0">
+        <h2 className="py-2 text-[24px] font-bold text-ink">{title}</h2>
+      </Container>
+
+      {/* MO는 pill 탭을 가로 스크롤(node 290:13126), PC는 36px 분할 탭을 쓴다. */}
+      <div className="flex gap-[6px] overflow-x-auto px-5 lg:hidden">
+        <PillTabs
+          items={tabs}
+          activeId={activeTab.id}
+          onSelect={selectTab}
+          variant="outline"
+        />
+      </div>
+      <Container className="hidden lg:block lg:px-0">
+        <SegmentedTabs
+          items={tabs}
+          activeId={activeTab.id}
+          onSelect={selectTab}
+          size="sm"
+        />
+      </Container>
+
+      <div className="mt-1">
+        {variant === "carousel" ? (
+          <CarouselBody
+            products={products}
+            page={safePage}
+            pageCount={pageCount}
+            onPage={setPage}
+          />
+        ) : (
+          <ListBody products={products} />
+        )}
+      </div>
+    </section>
+  );
+}
+
+/** Most Popular — node 277:5150 */
+function CarouselBody({
+  products,
+  page,
+  pageCount,
+  onPage,
+}: {
+  products: ShowcaseProduct[];
+  page: number;
+  pageCount: number;
+  onPage: (page: number) => void;
+}) {
+  const pageProducts = products.slice(page * COLUMNS, page * COLUMNS + COLUMNS);
+
+  return (
+    <div className="flex flex-col gap-5">
+      {/* MO — 카드 가로 스크롤 */}
+      <ul className="flex gap-4 overflow-x-auto px-5 lg:hidden">
+        {products.map((product) => (
+          <li key={product.id} className="w-[138px] shrink-0">
+            <ShowcaseCard product={product} />
+          </li>
+        ))}
+      </ul>
+
+      {/* PC — 한 페이지 5칸 */}
+      <Container className="hidden lg:block">
+        <ul className="grid grid-cols-5 gap-4">
+          {pageProducts.map((product) => (
+            <li key={product.id}>
+              <ShowcaseCard product={product} />
+            </li>
+          ))}
+        </ul>
+      </Container>
+
+      {pageCount > 1 && (
+        <div className="hidden items-center justify-center gap-4 lg:flex">
+          <SlideButton
+            direction="left"
+            size="small"
+            active={page > 0}
+            onClick={() => onPage(Math.max(0, page - 1))}
+          />
+          <SlideDots count={pageCount} activeIndex={page} onSelect={onPage} />
+          <SlideButton
+            direction="right"
+            size="small"
+            active={page < pageCount - 1}
+            onClick={() => onPage(Math.min(pageCount - 1, page + 1))}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Product — node 277:5238 */
+function ListBody({ products }: { products: ShowcaseProduct[] }) {
+  const [liked, setLiked] = useState<string[]>([]);
+  const toggle = (id: string) =>
+    setLiked((ids) =>
+      ids.includes(id) ? ids.filter((value) => value !== id) : [...ids, id],
+    );
+
+  /** MO는 5행씩 끊어 열 단위로 가로 스크롤한다. */
+  const columns: ShowcaseProduct[][] = [];
+  for (let i = 0; i < products.length; i += COLUMNS) {
+    columns.push(products.slice(i, i + COLUMNS));
   }
 
   return (
-    <section
-      aria-label={title}
-      className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 lg:px-gutter"
-    >
-      <div className="flex items-center py-2">
-        <h2 className="text-[24px] font-bold text-ink lg:text-[30px]">
-          {title}
-        </h2>
-      </div>
-
-      <div className="flex flex-col items-center gap-9">
-        <SegmentedTabs items={tabs} activeId={activeId} onSelect={selectTab} />
-
-        <div className="relative w-full">
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-[55px] lg:px-[99px]">
-            {visible.map((product) => (
+    <>
+      {/* MO — 목록 열 가로 스크롤 */}
+      <div className="flex gap-6 overflow-x-auto px-5 lg:hidden">
+        {columns.map((column, columnIndex) => (
+          <ul
+            key={columnIndex}
+            className="flex w-[296px] shrink-0 flex-col gap-[3px]"
+          >
+            {column.map((product) => (
               <li key={product.id}>
-                <Link href={product.href} className="block hover:opacity-90">
-                  <ProductCard
-                    imageSrc={product.imageSrc}
-                    imageAlt={product.imageAlt}
-                    title={product.title}
-                    price={product.price}
-                    titleLines={product.titleLines}
-                    sale={product.sale}
-                  />
-                </Link>
+                <ProductListRow
+                  item={{
+                    id: product.id,
+                    imageSrc: product.imageSrc,
+                    title: product.title,
+                    price: product.price,
+                    saleRate: product.sale?.rate,
+                  }}
+                  liked={liked.includes(product.id)}
+                  onToggleLike={() => toggle(product.id)}
+                />
               </li>
             ))}
           </ul>
-
-          {/* 좌우 버튼은 카드 4열이 한 줄로 서는 lg 이상에서만 쓴다. */}
-          <div className="hidden lg:block">
-            <SlideButton
-              direction="left"
-              active={safePage > 0}
-              disabled={safePage === 0}
-              onClick={() => setPage(safePage - 1)}
-              className="absolute top-1/2 left-0 -translate-y-1/2"
-            />
-            <SlideButton
-              direction="right"
-              active={safePage < pageCount - 1}
-              disabled={safePage >= pageCount - 1}
-              onClick={() => setPage(safePage + 1)}
-              className="absolute top-1/2 right-0 -translate-y-1/2"
-            />
-          </div>
-        </div>
-
-        <SlideDots
-          count={pageCount}
-          activeIndex={safePage}
-          onSelect={setPage}
-        />
+        ))}
       </div>
-    </section>
+
+      {/* PC — 5칸 그리드 */}
+      <Container className="hidden lg:block">
+        <ul className="grid grid-cols-5 gap-x-4 gap-y-5">
+          {products.map((product) => (
+            <li key={product.id}>
+              <ShowcaseCard product={product} />
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </>
+  );
+}
+
+function ShowcaseCard({
+  product,
+  className,
+}: {
+  product: ShowcaseProduct;
+  className?: string;
+}) {
+  return (
+    <ProductCard
+      className={cn(className)}
+      imageSrc={product.imageSrc}
+      imageAlt={product.imageAlt}
+      title={product.title}
+      price={product.price}
+      titleLines={product.titleLines}
+      sale={product.sale}
+    />
   );
 }
