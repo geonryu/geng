@@ -31,5 +31,5 @@
     "**/*.mts"
   ],
   // "* 2.ts" 는 iCloud 동기화가 만드는 중복 사본이다. 타입 충돌을 일으키므로 제외한다.
-  "exclude": ["node_modules", "**/* 2.ts", "**/* 2.tsx", "**/* 2.mts"]
+  "exclude": ["node_modules", "**/* ?.ts", "**/* ?.tsx", "**/* ?.mts"]
 }
