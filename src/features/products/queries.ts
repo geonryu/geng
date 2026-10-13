@@ -1,6 +1,7 @@
 import { cache } from "react";
 
 import { hasSupabaseEnv } from "@/lib/supabase/env";
+import { MOCK_CATALOG } from "@/features/products/mock-catalog";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -59,25 +60,50 @@ export type ProductListView =
  * unified_orders 적재가 시작되면 집계 기준으로 교체한다 (0006 마이그레이션 주석 참고).
  */
 export const listProducts = cache(
-  async (view: ProductListView = { kind: "all" }, limit = 40): Promise<ProductSummary[]> => {
-    if (!hasSupabaseEnv()) return [];
+  async (
+    view: ProductListView = { kind: "all" },
+    limit = 40,
+  ): Promise<ProductSummary[]> => {
+    if (hasSupabaseEnv()) {
+      const supabase = await createClient();
+      let query = supabase
+        .from("products")
+        .select(SUMMARY_COLUMNS)
+        .in("status", ["display", "on_sale"]);
 
-    const supabase = await createClient();
-    let query = supabase
-      .from("products")
-      .select(SUMMARY_COLUMNS)
-      .in("status", ["display", "on_sale"]);
+      if (view.kind === "sale") query = query.not("original_price", "is", null);
+      if (view.kind === "category") query = query.eq("category", view.category);
 
-    if (view.kind === "sale") query = query.not("original_price", "is", null);
-    if (view.kind === "category") query = query.eq("category", view.category);
+      const { data, error } = await query
+        .order("created_at", { ascending: false })
+        .limit(limit);
 
-    const { data } = await query
-      .order("created_at", { ascending: false })
-      .limit(limit);
+      // 테이블이 아직 없으면(마이그레이션 전) error 가 온다 — 그때는 폴백한다.
+      if (!error && data && data.length > 0) return data.map(toSummary);
+    }
 
-    return (data ?? []).map(toSummary);
+    return filterMock(view, limit);
   },
 );
+
+/**
+ * DB 가 비어 있을 때의 프로토타입 폴백.
+ * 진열 화면이 빈 상태로만 보이지 않도록 메인의 목업 상품을 같은 규칙으로 거른다.
+ */
+function filterMock(view: ProductListView, limit: number): ProductSummary[] {
+  const all = MOCK_CATALOG;
+  const picked =
+    view.kind === "sale"
+      ? all.filter((item) => item.originalPrice !== null)
+      : view.kind === "category"
+        ? all.filter((item) => item.category === view.category)
+        : all;
+
+  return picked.slice(0, limit).map(({ category, ...summary }) => {
+    void category;
+    return summary;
+  });
+}
 
 /** 회원이 찜한 상품. */
 export const listWishlistProducts = cache(

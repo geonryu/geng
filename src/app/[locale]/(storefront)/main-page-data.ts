@@ -122,7 +122,7 @@ export const SUB_BANNER_ITEMS: SubBannerItem[] = [
 ];
 
 /** Most Popular — node 277:5147 */
-const POPULAR_PRODUCTS = [
+export const POPULAR_PRODUCTS = [
   {
     id: "player-jacket",
     title: "2026 2nd Official Player Jacket",
@@ -176,7 +176,7 @@ export const POPULAR_TABS: ShowcaseTab[] = [
 ];
 
 /** Product — node 277:5235 (5칸 × 2줄) */
-const PRODUCT_GRID = [
+export const PRODUCT_GRID = [
   {
     id: "keycap-keyring",
     title: "[GenRang x Kumdori] Keycap Keyring(Character)",
