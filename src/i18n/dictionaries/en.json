@@ -1,0 +1,82 @@
+{
+  "common": {
+    "home": "홈",
+    "login": "로그인",
+    "signup": "회원가입",
+    "mypage": "마이페이지",
+    "cart": "장바구니",
+    "search": "검색",
+    "searchProduct": "상품 검색",
+    "searchPlaceholder": "검색어를 입력해주세요",
+    "required": "(필수)",
+    "currentLocation": "현재 위치",
+    "more": "더보기",
+    "delete": "삭제",
+    "close": "닫기",
+    "goShopping": "쇼핑하러 가기",
+    "goHome": "메인으로 가기",
+    "keepShopping": "계속 쇼핑하기",
+    "wishlistAdd": "찜하기",
+    "wishlistRemove": "찜 해제",
+    "unitWon": "원",
+    "unitCount": "개",
+    "unitTimes": "회",
+    "unitSheets": "장",
+    "unitCases": "건",
+    "prevSlide": "이전 슬라이드",
+    "nextSlide": "다음 슬라이드",
+    "playSlide": "슬라이드 재생",
+    "pauseSlide": "슬라이드 정지",
+    "prev": "이전",
+    "next": "다음",
+    "increaseQuantity": "수량 늘리기",
+    "decreaseQuantity": "수량 줄이기",
+    "goTo": "바로가기",
+    "deletedProduct": "삭제된 상품"
+  },
+  "nav": {
+    "main": "주 메뉴",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "localeSelect": "언어 선택",
+    "homeLink": "Gen.G Online Store 홈",
+    "headline": "주요 소식",
+    "items": {
+      "new": "NEW",
+      "best": "BEST",
+      "sale": "SALE",
+      "pro": "PRO",
+      "genrang": "GenRang",
+      "shop": "SHOP",
+      "qna": "Q&A"
+    }
+  },
+  "footer": {
+    "links": {
+      "inquiry": "1:1문의",
+      "notice": "공지사항",
+      "faq": "FAQ",
+      "about": "회사소개",
+      "terms": "이용약관",
+      "privacy": "개인정보처리방침",
+      "guide": "이용안내",
+      "partnership": "광고제휴문의"
+    },
+    "businessInfoToggle": "사업자정보",
+    "officeHoursNote": "주말, 공휴일 제외"
+  },
+  "legal": {
+    "_note": "법적 효력이 있는 문구. 기계번역 금지 — 미번역 시 한국어로 폴백한다.",
+    "business": {
+      "companyName": "법인명(상호)케이에스브이이스포츠코리아 주식회사",
+      "representative": "대표자(성명)아놀드원허사업자",
+      "mailOrderNo": "통신판매업 신고제 2024-서울강남-01127 호",
+      "phone": "전화010-8114-3445",
+      "address": "주소06100 서울특별시 강남구 봉은사로49길 38 (논현동) 1층",
+      "registrationNo": "등록번호 안내789-88-00514",
+      "registrationCheck": "[사업자정보확인]",
+      "privacyOfficer": "개인정보보호책임자케이에스브이이스포츠코리아주식회사",
+      "copyright": "COPYRIGHT © 케이에스브이이스포츠코리아 주식회사. All rights reserved."
+    }
+  }
+}

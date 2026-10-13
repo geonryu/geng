@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/icons";
 import { Logo } from "@/components/ui/logo";
 import { SearchField } from "@/components/ui/search-field";
+import { useDict, useLocale } from "@/i18n/locale-context";
 
 /**
  * HEADER — node 277:6029 (PC, 116px) · node 290:13056 (MO, 82px)
@@ -24,25 +25,21 @@ import { SearchField } from "@/components/ui/search-field";
  */
 
 const NAV_ITEMS = [
-  { label: "NEW", href: "/new" },
-  { label: "BEST", href: "/best" },
-  { label: "SALE", href: "/sale" },
-  { label: "PRO", href: "/pro" },
-  { label: "GenRang", href: "/genrang" },
-  { label: "SHOP", href: "/shop" },
-  { label: "Q&A", href: "/qna" },
-];
+  { key: "new", href: "/new" },
+  { key: "best", href: "/best" },
+  { key: "sale", href: "/sale" },
+  { key: "pro", href: "/pro" },
+  { key: "genrang", href: "/genrang" },
+  { key: "shop", href: "/shop" },
+  { key: "qna", href: "/qna" },
+] as const;
 
 const SLOGAN_MESSAGES = ["#CHANGE THE GAME", "#CHANGE THE WORLD"];
 
-export function SiteHeader({
-  cartCount = 0,
-  locale = "KR",
-}: {
-  cartCount?: number;
-  locale?: string;
-}) {
+export function SiteHeader({ cartCount = 0 }: { cartCount?: number }) {
   const [open, setOpen] = useState(false);
+  const dict = useDict();
+  const locale = useLocale();
 
   return (
     <header className="border-b border-line bg-white">
@@ -59,23 +56,23 @@ export function SiteHeader({
           <ul className="hidden items-center gap-3 lg:flex">
             <li className="flex items-center gap-1">
               <LocaleLink href="/login" className="hover:opacity-70">
-                로그인
+                {dict.common.login}
               </LocaleLink>
               <span aria-hidden="true">/</span>
               <LocaleLink href="/signup" className="hover:opacity-70">
-                회원가입
+                {dict.common.signup}
               </LocaleLink>
             </li>
             <li>
               <LocaleLink href="/mypage" className="hover:opacity-70">
-                마이페이지
+                {dict.common.mypage}
               </LocaleLink>
             </li>
             <li>
               <LocaleLink href="/cart" className="flex items-center hover:opacity-70">
                 <CartIcon className="size-4" />
                 <span className="ml-[2px] flex items-center gap-[2px]">
-                  <span>장바구니</span>
+                  <span>{dict.common.cart}</span>
                   <span>{cartCount}</span>
                 </span>
               </LocaleLink>
@@ -84,10 +81,10 @@ export function SiteHeader({
               <LocaleLink
                 href="/locale"
                 className="flex items-center hover:opacity-70"
-                aria-label="언어 선택"
+                aria-label={dict.nav.localeSelect}
               >
                 <GlobeIcon className="size-4" />
-                <span>{locale}</span>
+                <span>{locale.toUpperCase()}</span>
               </LocaleLink>
             </li>
           </ul>
@@ -95,7 +92,7 @@ export function SiteHeader({
       </div>
 
       {/* NAVIGATION BAR — node 277:6060 / 290:13060 */}
-      <nav aria-label="주 메뉴">
+      <nav aria-label={dict.nav.main}>
         <Container className="flex h-12 items-center justify-between gap-4 lg:h-[80px] lg:py-2">
           {/* MO: 햄버거 — PC에서는 감춘다 */}
           <button
@@ -103,7 +100,7 @@ export function SiteHeader({
             onClick={() => setOpen((value) => !value)}
             aria-controls="mobile-nav"
             aria-expanded={open}
-            aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
+            aria-label={open ? dict.nav.closeMenu : dict.nav.openMenu}
             className="text-ink lg:hidden"
           >
             {open ? <CloseIcon /> : <MenuIcon />}
@@ -111,14 +108,14 @@ export function SiteHeader({
 
           {/* MO에서는 가운데, PC에서는 GNB와 함께 왼쪽에 놓인다 */}
           <div className="flex items-center gap-[39px]">
-            <LocaleLink href="/" aria-label="Gen.G Online Store 홈">
+            <LocaleLink href="/" aria-label={dict.nav.homeLink}>
               <Logo className="size-9 lg:size-[50px]" />
             </LocaleLink>
             <ul className="hidden items-center gap-10 text-[16px] font-bold text-ink lg:flex">
               {NAV_ITEMS.map((item) => (
-                <li key={item.label}>
+                <li key={item.key}>
                   <LocaleLink href={item.href} className="hover:opacity-70">
-                    {item.label}
+                    {dict.nav.items[item.key]}
                   </LocaleLink>
                 </li>
               ))}
@@ -131,12 +128,16 @@ export function SiteHeader({
             </div>
 
             {/* MO: 장바구니 · 마이페이지 아이콘 — node 290:13071 */}
-            <LocaleLink href="/cart" aria-label="장바구니" className="text-ink lg:hidden">
+            <LocaleLink
+              href="/cart"
+              aria-label={dict.common.cart}
+              className="text-ink lg:hidden"
+            >
               <CartIcon />
             </LocaleLink>
             <LocaleLink
               href="/mypage"
-              aria-label="마이페이지"
+              aria-label={dict.common.mypage}
               className="text-ink lg:hidden"
             >
               <MyPageIcon />
@@ -150,7 +151,7 @@ export function SiteHeader({
             <ul className="mt-2 flex flex-col text-[16px] font-bold text-ink">
               {NAV_ITEMS.map((item) => (
                 <li
-                  key={item.label}
+                  key={item.key}
                   className="border-b border-line last:border-b-0"
                 >
                   <LocaleLink
@@ -158,7 +159,7 @@ export function SiteHeader({
                     onClick={() => setOpen(false)}
                     className="block py-3"
                   >
-                    {item.label}
+                    {dict.nav.items[item.key]}
                   </LocaleLink>
                 </li>
               ))}

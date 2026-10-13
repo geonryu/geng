@@ -8,6 +8,7 @@ import {
   YoutubeIcon,
 } from "@/components/ui/icons";
 import { Logo } from "@/components/ui/logo";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 
 /**
  * FOOTER — node 277:6101 (PC, 423px) · node 290:13326 (MO, 180px)
@@ -20,27 +21,27 @@ import { Logo } from "@/components/ui/logo";
 
 /** PC 좌측 열 — node 277:6112 */
 const SUPPORT_LINKS = [
-  { label: "1:1문의", href: "/support/inquiry" },
-  { label: "공지사항", href: "/support/notice" },
-  { label: "FAQ", href: "/support/faq" },
-];
+  { key: "inquiry", href: "/support/inquiry" },
+  { key: "notice", href: "/support/notice" },
+  { key: "faq", href: "/support/faq" },
+] as const;
 
 /** PC 우측 열 — node 277:6114 */
 const POLICY_LINKS = [
-  { label: "회사소개", href: "/about" },
-  { label: "이용약관", href: "/terms" },
-  { label: "개인정보처리방침", href: "/privacy" },
-  { label: "이용안내", href: "/guide" },
-  { label: "광고제휴문의", href: "/partnership" },
-];
+  { key: "about", href: "/about" },
+  { key: "terms", href: "/terms" },
+  { key: "privacy", href: "/privacy" },
+  { key: "guide", href: "/guide" },
+  { key: "partnership", href: "/partnership" },
+] as const;
 
 /** MO 한 줄 링크 — node 290:13338 */
 const MOBILE_LINKS = [
-  { label: "공지사항", href: "/support/notice" },
-  { label: "이용약관", href: "/terms" },
-  { label: "개인정보처리방침", href: "/privacy" },
-  { label: "광고제휴문의", href: "/partnership" },
-];
+  { key: "notice", href: "/support/notice" },
+  { key: "terms", href: "/terms" },
+  { key: "privacy", href: "/privacy" },
+  { key: "partnership", href: "/partnership" },
+] as const;
 
 const SOCIAL_LINKS = [
   { label: "X", href: "https://x.com/genggg", Icon: XIcon },
@@ -52,33 +53,37 @@ const SOCIAL_LINKS = [
   { label: "YouTube", href: "https://www.youtube.com/@GenG", Icon: YoutubeIcon },
 ];
 
-/** 사업자 정보 — node 277:6107. 시안 텍스트를 줄 단위로 그대로 옮겼다. */
-const BUSINESS_INFO = [
-  "법인명(상호)케이에스브이이스포츠코리아 주식회사",
-  "대표자(성명)아놀드원허사업자",
-  "통신판매업 신고제 2024-서울강남-01127 호",
-  "전화010-8114-3445",
-  "주소06100 서울특별시 강남구 봉은사로49길 38 (논현동) 1층",
-];
+/**
+ * 사업자 정보 — node 277:6107.
+ * 법적 표기라 기계번역 대상에서 제외한다 (dictionaries 의 legal.business).
+ */
 
 const OFFICE_HOURS = ["AM 10:00 ~ PM 12:00", "PM 01:00 ~ 05:00"];
 
-function BusinessInfo({ className }: { className?: string }) {
+function BusinessInfo({
+  dict,
+  className,
+}: {
+  dict: Dictionary;
+  className?: string;
+}) {
+  const business = dict.legal.business;
+
   return (
     <address className={className}>
-      <p>{BUSINESS_INFO[0]}</p>
-      <p>{BUSINESS_INFO[1]}</p>
+      <p>{business.companyName}</p>
+      <p>{business.representative}</p>
       <p>
-        등록번호 안내789-88-00514{" "}
+        {business.registrationNo}{" "}
         <LocaleLink href="/business-info" className="underline">
-          [사업자정보확인]
+          {business.registrationCheck}
         </LocaleLink>
       </p>
-      {BUSINESS_INFO.slice(2).map((line) => (
-        <p key={line}>{line}</p>
-      ))}
+      <p>{business.mailOrderNo}</p>
+      <p>{business.phone}</p>
+      <p>{business.address}</p>
       <p>
-        개인정보보호책임자케이에스브이이스포츠코리아주식회사{" "}
+        {business.privacyOfficer}{" "}
         <a href="mailto:geng_cs@geng.gg" className="underline">
           (geng_cs@geng.gg)
         </a>
@@ -107,7 +112,9 @@ function SocialLinks({ size }: { size: "sm" | "md" }) {
   );
 }
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const dict = await getDictionary();
+
   return (
     <footer className="bg-ink text-white">
       {/* MO — node 290:13326 */}
@@ -117,21 +124,21 @@ export function SiteFooter() {
             <summary className="flex cursor-pointer list-none items-center justify-between">
               <Logo tone="white" className="size-6" />
               <span className="flex items-center gap-[5px] text-[14px] font-bold">
-                사업자정보
+                {dict.footer.businessInfoToggle}
                 <ChevronToggleIcon className="size-3 group-open:rotate-180" />
               </span>
             </summary>
-            <BusinessInfo className="mt-3 flex flex-col gap-2 text-[12px]/[1.5] not-italic" />
+            <BusinessInfo dict={dict} className="mt-3 flex flex-col gap-2 text-[12px]/[1.5] not-italic" />
           </details>
 
           <ul className="flex items-center justify-between text-[12px]/[1.5]">
             {MOBILE_LINKS.map((item, index) => (
-              <li key={item.label} className="flex items-center gap-2">
+              <li key={item.key} className="flex items-center gap-2">
                 {index > 0 && (
                   <span aria-hidden="true" className="h-2 w-px bg-white/40" />
                 )}
                 <LocaleLink href={item.href} className="hover:opacity-70">
-                  {item.label}
+                  {dict.footer.links[item.key]}
                 </LocaleLink>
               </li>
             ))}
@@ -149,7 +156,7 @@ export function SiteFooter() {
             </div>
 
             <div className="text-right text-[12px]/[1.5]">
-              <p>주말, 공휴일 제외</p>
+              <p>{dict.footer.officeHoursNote}</p>
               {OFFICE_HOURS.map((line) => (
                 <p key={line}>{line}</p>
               ))}
@@ -162,9 +169,9 @@ export function SiteFooter() {
       <Container className="hidden py-[50px] lg:flex lg:justify-between">
         <div className="flex w-[472px] flex-col gap-4">
           <Logo tone="white" />
-          <BusinessInfo className="flex flex-col gap-5 text-[14px] not-italic" />
+          <BusinessInfo dict={dict} className="flex flex-col gap-5 text-[14px] not-italic" />
           <p className="text-[13px]">
-            COPYRIGHT © 케이에스브이이스포츠코리아 주식회사. All rights reserved.
+            {dict.legal.business.copyright}
           </p>
         </div>
 
@@ -172,9 +179,9 @@ export function SiteFooter() {
           <div className="flex justify-end gap-10">
             <ul className="flex flex-col gap-5 text-right text-[14px]">
               {SUPPORT_LINKS.map((item) => (
-                <li key={item.label}>
+                <li key={item.key}>
                   <LocaleLink href={item.href} className="hover:opacity-70">
-                    {item.label}
+                    {dict.footer.links[item.key]}
                   </LocaleLink>
                 </li>
               ))}
@@ -182,9 +189,9 @@ export function SiteFooter() {
 
             <ul className="flex flex-col gap-5 text-right text-[14px]">
               {POLICY_LINKS.map((item) => (
-                <li key={item.label}>
+                <li key={item.key}>
                   <LocaleLink href={item.href} className="hover:opacity-70">
-                    {item.label}
+                    {dict.footer.links[item.key]}
                   </LocaleLink>
                 </li>
               ))}
@@ -200,7 +207,7 @@ export function SiteFooter() {
                 geng_cs@geng.gg
               </a>
               <p className="text-[14px]">AM 10:00 ~ PM 12:00, PM 01:00~05:00</p>
-              <p className="text-[14px]">주말, 공휴일 제외</p>
+              <p className="text-[14px]">{dict.footer.officeHoursNote}</p>
             </div>
 
             <SocialLinks size="md" />

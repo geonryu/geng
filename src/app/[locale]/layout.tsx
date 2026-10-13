@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_KR } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import { LOCALES, isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { LocaleProvider } from "@/i18n/locale-context";
 import "./globals.css";
 
@@ -39,13 +40,17 @@ export default async function RootLayout(props: LayoutProps<"/[locale]">) {
   // proxy 가 걸러주지만, 직접 접근으로 들어온 잘못된 로케일도 여기서 막는다.
   if (!isLocale(locale)) notFound();
 
+  const dict = await getDictionary(locale);
+
   return (
     <html
       lang={locale}
       className={`${inter.variable} ${notoSansKr.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LocaleProvider locale={locale}>{props.children}</LocaleProvider>
+        <LocaleProvider locale={locale} dict={dict}>
+          {props.children}
+        </LocaleProvider>
       </body>
     </html>
   );
