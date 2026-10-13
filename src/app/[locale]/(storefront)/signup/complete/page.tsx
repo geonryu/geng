@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { CheckMarkIcon } from "@/components/ui/icons";
+import { buttonClass } from "@/components/ui/button";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { Logo } from "@/components/ui/logo";
 import { localePath } from "@/i18n/server";
 import { getCurrentMember } from "@/features/account/queries";
@@ -50,21 +52,36 @@ export default async function SignupCompletePage() {
                 <br />
                 성공적으로 완료되었습니다.
               </p>
-              <p>
-                <span className="text-sale">{email}</span>으로
+              <p className="text-[14px] text-muted">
+                <span className="text-ink">{email}</span>
                 <br />
-                인증 메일이 발송되었습니다.
+                위 주소로 주문·배송 안내를 보내드립니다.
               </p>
             </div>
           </div>
 
-          <p className="flex h-[41px] w-full items-center justify-center gap-1 rounded-pill bg-surface-soft px-4 text-center text-[14px] text-ink">
-            <span aria-hidden="true" className="text-[13px]">
-              ∙
-            </span>
-            이메일 주소로 발송된 인증 메일을 통해 인증하신 후에 로그인이
-            가능합니다.
-          </p>
+          <div className="flex w-full flex-col items-center gap-3">
+            <p className="flex h-[41px] w-full items-center justify-center gap-1 rounded-pill bg-surface-soft px-4 text-center text-[14px] text-ink">
+              <span aria-hidden="true" className="text-[13px]">
+                ∙
+              </span>
+              지금 바로 쇼핑을 시작하실 수 있습니다.
+            </p>
+            <div className="flex gap-2">
+              <LocaleLink
+                href="/"
+                className={buttonClass({ tone: "outline-strong", size: "md" })}
+              >
+                쇼핑하러 가기
+              </LocaleLink>
+              <LocaleLink
+                href="/mypage"
+                className={buttonClass({ tone: "solid", size: "md" })}
+              >
+                마이페이지로 가기
+              </LocaleLink>
+            </div>
+          </div>
         </div>
       </div>
     </Container>

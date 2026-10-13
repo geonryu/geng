@@ -8,9 +8,15 @@ import { ChevronRightIcon } from "@/components/ui/icons";
 import { InfoStrip } from "@/components/ui/info-strip";
 import { StatCard } from "@/components/ui/stat-card";
 import { MyPageShell } from "@/features/account/components/mypage-shell";
-import { ORDER_STATUS, THUMBNAILS } from "@/features/account/mypage-data";
+import { getDictionary } from "@/i18n/dictionaries";
 import { loginPath } from "@/i18n/server";
-import { getCurrentMember, getMemberSummary } from "@/features/account/queries";
+import {
+  ORDER_STATUS_KEYS,
+  getCurrentMember,
+  getMemberSummary,
+  getOrderStatusCounts,
+} from "@/features/account/queries";
+import { listWishlistProducts } from "@/features/products/queries";
 import { formatWon } from "@/lib/utils/price";
 
 export const metadata: Metadata = {
@@ -23,7 +29,12 @@ export default async function MyPage() {
   const member = await getCurrentMember();
   if (!member) redirect(await loginPath("/mypage"));
 
-  const summary = await getMemberSummary(member.id);
+  const [summary, statusCounts, wishlist, dict] = await Promise.all([
+    getMemberSummary(member.id),
+    getOrderStatusCounts(member.id),
+    listWishlistProducts(member.id),
+    getDictionary(),
+  ]);
 
   return (
     <>
@@ -63,29 +74,65 @@ export default async function MyPage() {
         {/* 주문 상태 — node 277:6511. 첫 칸만 제목/부연 형태다. */}
         <div className="flex w-full items-stretch overflow-x-auto rounded-field border border-line bg-white">
           <div className="flex h-[98px] w-[162px] shrink-0 flex-col justify-center gap-2 pl-5">
-            <p className="text-[16px] font-bold text-ink">주문내역</p>
-            <p className="text-[13px] text-muted">(최근 3개월 기준)</p>
+            <p className="text-[16px] font-bold text-ink">
+              {dict.mypage.orderStatus.title}
+            </p>
+            <p className="text-[13px] text-muted">
+              {dict.mypage.orderStatus.note}
+            </p>
           </div>
-          {ORDER_STATUS.map((status) => (
+          {ORDER_STATUS_KEYS.map((key) => (
             <div
-              key={status.label}
+              key={key}
               className="flex h-[98px] min-w-[117px] flex-1 flex-col justify-center gap-2 border-l border-line pl-5"
             >
-              <p className="text-[16px] font-bold text-ink">{status.value}</p>
-              <p className="text-[14px] text-muted">{status.label}</p>
+              <p className="text-[16px] font-bold text-ink">
+                {statusCounts[key]}
+              </p>
+              <p className="text-[14px] text-muted">
+                {dict.mypage.orderStatus[key]}
+              </p>
             </div>
           ))}
         </div>
 
-        <ThumbnailSection title="찜한 상품" href="/mypage/wishlist" />
-        <ThumbnailSection title="최근 본 상품" href="/mypage/recent" />
+        <ThumbnailSection
+          title={dict.mypage.wishlist}
+          href="/mypage/wishlist"
+          thumbnails={wishlist.map((p) => ({
+            id: p.id,
+            src: p.thumbnailSrc ?? "/assets/icons/empty-state.svg",
+          }))}
+          emptyText={dict.mypage.emptyWishlist}
+          moreLabel={dict.common.more}
+        />
+        {/* 최근 본 상품은 열람 이력 저장 방식이 정해지지 않아 아직 비어 있다. */}
+        <ThumbnailSection
+          title={dict.mypage.recent}
+          href="/mypage/recent"
+          thumbnails={[]}
+          emptyText={dict.mypage.emptyRecent}
+          moreLabel={dict.common.more}
+        />
       </MyPageShell>
     </>
   );
 }
 
 /** 찜한 상품 · 최근 본 상품 — node 277:6565 / 277:6584 */
-function ThumbnailSection({ title, href }: { title: string; href: string }) {
+function ThumbnailSection({
+  title,
+  href,
+  thumbnails,
+  emptyText,
+  moreLabel,
+}: {
+  title: string;
+  href: string;
+  thumbnails: { id: string; src: string }[];
+  emptyText: string;
+  moreLabel: string;
+}) {
   return (
     <section className="flex flex-col gap-5 pt-4">
       <div className="flex items-center justify-between">
@@ -94,24 +141,28 @@ function ThumbnailSection({ title, href }: { title: string; href: string }) {
           href={href}
           className="flex items-center gap-1 text-[14px] text-muted hover:text-ink"
         >
-          더보기
+          {moreLabel}
           <ChevronRightIcon />
         </LocaleLink>
       </div>
 
-      <ul className="flex gap-[23px] overflow-x-auto">
-        {THUMBNAILS.map((thumbnail) => (
-          <li key={thumbnail.id} className="relative size-[76px] shrink-0">
-            <Image
-              src={thumbnail.src}
-              alt=""
-              fill
-              sizes="76px"
-              className="object-cover"
-            />
-          </li>
-        ))}
-      </ul>
+      {thumbnails.length === 0 ? (
+        <p className="py-6 text-center text-[14px] text-muted">{emptyText}</p>
+      ) : (
+        <ul className="flex gap-[23px] overflow-x-auto">
+          {thumbnails.map((thumbnail) => (
+            <li key={thumbnail.id} className="relative size-[76px] shrink-0">
+              <Image
+                src={thumbnail.src}
+                alt=""
+                fill
+                sizes="76px"
+                className="object-cover"
+              />
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

@@ -166,3 +166,52 @@ export const listAddresses = cache(
     }));
   },
 );
+
+/**
+ * 주문 상태별 건수 — node 277:6511 / 277:6752
+ *
+ * 통합 주문 read-model 에서 센다. 채널이 주는 상태 문자열이 제각각이라
+ * 여기서 시안의 6개 칸으로 모은다. 매칭되지 않는 상태는 어느 칸에도 들어가지 않는다.
+ */
+export const ORDER_STATUS_KEYS = [
+  "pending",
+  "preparing",
+  "shipping",
+  "delivered",
+  "cancelled",
+  "claimed",
+] as const;
+
+export type OrderStatusKey = (typeof ORDER_STATUS_KEYS)[number];
+
+/** 채널별 상태 문자열 → 시안의 칸. 연동이 붙으면 여기만 넓히면 된다. */
+const STATUS_MAP: Record<string, OrderStatusKey> = {
+  입금전: "pending",
+  배송준비중: "preparing",
+  배송중: "shipping",
+  배송완료: "delivered",
+  취소: "cancelled",
+  "교환/반품": "claimed",
+};
+
+export const getOrderStatusCounts = cache(
+  async (memberId: string): Promise<Record<OrderStatusKey, number>> => {
+    const empty = Object.fromEntries(
+      ORDER_STATUS_KEYS.map((key) => [key, 0]),
+    ) as Record<OrderStatusKey, number>;
+
+    if (!hasSupabaseEnv()) return empty;
+
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("unified_orders")
+      .select("status")
+      .eq("member_id", memberId);
+
+    for (const row of data ?? []) {
+      const key = STATUS_MAP[row.status];
+      if (key) empty[key] += 1;
+    }
+    return empty;
+  },
+);

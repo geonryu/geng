@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/icons";
 import { Logo } from "@/components/ui/logo";
 import { SearchField } from "@/components/ui/search-field";
+import { logout } from "@/features/account/actions";
 import { useDict, useLocale } from "@/i18n/locale-context";
+import { LocaleField } from "@/i18n/locale-field";
 
 /**
  * HEADER — node 277:6029 (PC, 116px) · node 290:13056 (MO, 82px)
@@ -36,7 +38,14 @@ const NAV_ITEMS = [
 
 const SLOGAN_MESSAGES = ["#CHANGE THE GAME", "#CHANGE THE WORLD"];
 
-export function SiteHeader({ cartCount = 0 }: { cartCount?: number }) {
+export function SiteHeader({
+  cartCount = 0,
+  /** 로그인한 회원의 이름. 비로그인이면 null — 유틸 링크가 이 값으로 갈린다. */
+  memberName = null,
+}: {
+  cartCount?: number;
+  memberName?: string | null;
+}) {
   const [open, setOpen] = useState(false);
   const dict = useDict();
   const locale = useLocale();
@@ -55,13 +64,24 @@ export function SiteHeader({ cartCount = 0 }: { cartCount?: number }) {
           {/* 유틸 링크는 PC 전용. MO는 네비 바 아이콘이 같은 역할을 한다. */}
           <ul className="hidden items-center gap-3 lg:flex">
             <li className="flex items-center gap-1">
-              <LocaleLink href="/login" className="hover:opacity-70">
-                {dict.common.login}
-              </LocaleLink>
-              <span aria-hidden="true">/</span>
-              <LocaleLink href="/signup" className="hover:opacity-70">
-                {dict.common.signup}
-              </LocaleLink>
+              {memberName ? (
+                <form action={logout} className="flex items-center">
+                  <LocaleField />
+                  <button type="submit" className="hover:opacity-70">
+                    {dict.common.logout}
+                  </button>
+                </form>
+              ) : (
+                <>
+                  <LocaleLink href="/login" className="hover:opacity-70">
+                    {dict.common.login}
+                  </LocaleLink>
+                  <span aria-hidden="true">/</span>
+                  <LocaleLink href="/signup" className="hover:opacity-70">
+                    {dict.common.signup}
+                  </LocaleLink>
+                </>
+              )}
             </li>
             <li>
               <LocaleLink href="/mypage" className="hover:opacity-70">
