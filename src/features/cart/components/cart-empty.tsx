@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { ChevronToggleIcon } from "@/components/ui/icons";
 
@@ -24,13 +24,13 @@ export function CartEmpty() {
       </div>
 
       <div className="flex justify-center">
-        <Link
+        <LocaleLink
           href="/"
           className="flex h-[45px] items-center justify-center gap-1 rounded-field border border-muted px-4 text-[14px] text-muted"
         >
           계속 쇼핑하기
           <ChevronToggleIcon direction="down" className="size-4 -rotate-90" />
-        </Link>
+        </LocaleLink>
       </div>
     </div>
   );

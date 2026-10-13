@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { ChevronToggleIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils/cn";
@@ -37,13 +37,13 @@ export function EmptyState({
 
       {action && (
         <div className="flex justify-center">
-          <Link
+          <LocaleLink
             href={action.href}
             className="flex h-[45px] items-center justify-center gap-1 rounded-field border border-muted px-4 text-[14px] text-muted"
           >
             {action.label}
             <ChevronToggleIcon direction="down" className="size-4 -rotate-90" />
-          </Link>
+          </LocaleLink>
         </div>
       )}
     </div>

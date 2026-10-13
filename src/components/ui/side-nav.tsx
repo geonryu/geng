@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useState } from "react";
 
 import { ChevronToggleIcon } from "@/components/ui/icons";
@@ -72,7 +72,7 @@ export function SideNav({
             <ul hidden={!open} className="flex flex-col gap-3 text-[14px]">
               {group.items.map((item) => (
                 <li key={item.href}>
-                  <Link
+                  <LocaleLink
                     href={item.href}
                     className={cn(
                       "block hover:text-ink",
@@ -82,7 +82,7 @@ export function SideNav({
                     )}
                   >
                     {item.label}
-                  </Link>
+                  </LocaleLink>
                 </li>
               ))}
             </ul>

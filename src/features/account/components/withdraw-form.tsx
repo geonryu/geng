@@ -7,6 +7,7 @@ import { FormField } from "@/components/ui/form-field";
 import { BoxField } from "@/components/ui/text-field";
 import { withdraw } from "@/features/account/actions";
 import { FieldError } from "@/features/account/components/field-error";
+import { LocaleField } from "@/i18n/locale-field";
 import type { FormState } from "@/features/account/schemas";
 
 /**
@@ -25,6 +26,8 @@ export function WithdrawForm({ loginId }: { loginId: string }) {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
+      <LocaleField />
+
       <FormField label="확인" required>
         <BoxField
           name="confirmLoginId"

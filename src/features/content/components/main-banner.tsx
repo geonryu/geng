@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useCallback, useEffect, useState } from "react";
 
 import { PauseIcon, PlayIcon } from "@/components/ui/icons";
@@ -87,7 +87,7 @@ export function MainBanner({ slides }: { slides: MainBannerSlide[] }) {
               {dimmed ? (
                 <div className="absolute inset-0 bg-black/40" />
               ) : (
-                <Link
+                <LocaleLink
                   href={slide.href}
                   className="absolute inset-0 flex flex-col justify-end gap-2 p-5 text-white"
                 >
@@ -101,7 +101,7 @@ export function MainBanner({ slides }: { slides: MainBannerSlide[] }) {
                   <p className="text-[14px]/[1.8] font-medium">
                     {slide.subtitle}
                   </p>
-                </Link>
+                </LocaleLink>
               )}
             </div>
           ))}
@@ -164,7 +164,7 @@ function MobileSlide({
       <div className="absolute inset-0 bg-gradient-to-b from-transparent from-[71%] to-black/20" />
 
       <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-2">
-        <Link href={slide.href} className="flex flex-col gap-[5px] text-white">
+        <LocaleLink href={slide.href} className="flex flex-col gap-[5px] text-white">
           <span className="text-[20px]/[1.4] font-bold">
             {slide.titleLines.map((line) => (
               <span key={line} className="block">
@@ -173,7 +173,7 @@ function MobileSlide({
             ))}
           </span>
           <span className="text-[14px]/[1.8] font-medium">{slide.subtitle}</span>
-        </Link>
+        </LocaleLink>
 
         <button
           type="button"

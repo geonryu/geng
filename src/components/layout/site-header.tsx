@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useState } from "react";
 
 import { Container } from "@/components/layout/container";
@@ -58,37 +58,37 @@ export function SiteHeader({
           {/* 유틸 링크는 PC 전용. MO는 네비 바 아이콘이 같은 역할을 한다. */}
           <ul className="hidden items-center gap-3 lg:flex">
             <li className="flex items-center gap-1">
-              <Link href="/login" className="hover:opacity-70">
+              <LocaleLink href="/login" className="hover:opacity-70">
                 로그인
-              </Link>
+              </LocaleLink>
               <span aria-hidden="true">/</span>
-              <Link href="/signup" className="hover:opacity-70">
+              <LocaleLink href="/signup" className="hover:opacity-70">
                 회원가입
-              </Link>
+              </LocaleLink>
             </li>
             <li>
-              <Link href="/mypage" className="hover:opacity-70">
+              <LocaleLink href="/mypage" className="hover:opacity-70">
                 마이페이지
-              </Link>
+              </LocaleLink>
             </li>
             <li>
-              <Link href="/cart" className="flex items-center hover:opacity-70">
+              <LocaleLink href="/cart" className="flex items-center hover:opacity-70">
                 <CartIcon className="size-4" />
                 <span className="ml-[2px] flex items-center gap-[2px]">
                   <span>장바구니</span>
                   <span>{cartCount}</span>
                 </span>
-              </Link>
+              </LocaleLink>
             </li>
             <li>
-              <Link
+              <LocaleLink
                 href="/locale"
                 className="flex items-center hover:opacity-70"
                 aria-label="언어 선택"
               >
                 <GlobeIcon className="size-4" />
                 <span>{locale}</span>
-              </Link>
+              </LocaleLink>
             </li>
           </ul>
         </Container>
@@ -111,15 +111,15 @@ export function SiteHeader({
 
           {/* MO에서는 가운데, PC에서는 GNB와 함께 왼쪽에 놓인다 */}
           <div className="flex items-center gap-[39px]">
-            <Link href="/" aria-label="Gen.G Online Store 홈">
+            <LocaleLink href="/" aria-label="Gen.G Online Store 홈">
               <Logo className="size-9 lg:size-[50px]" />
-            </Link>
+            </LocaleLink>
             <ul className="hidden items-center gap-10 text-[16px] font-bold text-ink lg:flex">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="hover:opacity-70">
+                  <LocaleLink href={item.href} className="hover:opacity-70">
                     {item.label}
-                  </Link>
+                  </LocaleLink>
                 </li>
               ))}
             </ul>
@@ -131,16 +131,16 @@ export function SiteHeader({
             </div>
 
             {/* MO: 장바구니 · 마이페이지 아이콘 — node 290:13071 */}
-            <Link href="/cart" aria-label="장바구니" className="text-ink lg:hidden">
+            <LocaleLink href="/cart" aria-label="장바구니" className="text-ink lg:hidden">
               <CartIcon />
-            </Link>
-            <Link
+            </LocaleLink>
+            <LocaleLink
               href="/mypage"
               aria-label="마이페이지"
               className="text-ink lg:hidden"
             >
               <MyPageIcon />
-            </Link>
+            </LocaleLink>
           </div>
         </Container>
 
@@ -153,13 +153,13 @@ export function SiteHeader({
                   key={item.label}
                   className="border-b border-line last:border-b-0"
                 >
-                  <Link
+                  <LocaleLink
                     href={item.href}
                     onClick={() => setOpen(false)}
                     className="block py-3"
                   >
                     {item.label}
-                  </Link>
+                  </LocaleLink>
                 </li>
               ))}
             </ul>

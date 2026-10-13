@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { Container } from "@/components/layout/container";
 import {
@@ -70,9 +70,9 @@ function BusinessInfo({ className }: { className?: string }) {
       <p>{BUSINESS_INFO[1]}</p>
       <p>
         등록번호 안내789-88-00514{" "}
-        <Link href="/business-info" className="underline">
+        <LocaleLink href="/business-info" className="underline">
           [사업자정보확인]
-        </Link>
+        </LocaleLink>
       </p>
       {BUSINESS_INFO.slice(2).map((line) => (
         <p key={line}>{line}</p>
@@ -130,9 +130,9 @@ export function SiteFooter() {
                 {index > 0 && (
                   <span aria-hidden="true" className="h-2 w-px bg-white/40" />
                 )}
-                <Link href={item.href} className="hover:opacity-70">
+                <LocaleLink href={item.href} className="hover:opacity-70">
                   {item.label}
-                </Link>
+                </LocaleLink>
               </li>
             ))}
           </ul>
@@ -173,9 +173,9 @@ export function SiteFooter() {
             <ul className="flex flex-col gap-5 text-right text-[14px]">
               {SUPPORT_LINKS.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="hover:opacity-70">
+                  <LocaleLink href={item.href} className="hover:opacity-70">
                     {item.label}
-                  </Link>
+                  </LocaleLink>
                 </li>
               ))}
             </ul>
@@ -183,9 +183,9 @@ export function SiteFooter() {
             <ul className="flex flex-col gap-5 text-right text-[14px]">
               {POLICY_LINKS.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="hover:opacity-70">
+                  <LocaleLink href={item.href} className="hover:opacity-70">
                     {item.label}
-                  </Link>
+                  </LocaleLink>
                 </li>
               ))}
             </ul>

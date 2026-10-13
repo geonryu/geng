@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { ChevronRightIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils/cn";
@@ -29,9 +29,9 @@ export function Breadcrumb({
               <ChevronRightIcon className="mx-2 text-muted" />
             )}
             {item.href ? (
-              <Link href={item.href} className="hover:text-ink">
+              <LocaleLink href={item.href} className="hover:text-ink">
                 {item.label}
-              </Link>
+              </LocaleLink>
             ) : (
               <span aria-current="page">{item.label}</span>
             )}

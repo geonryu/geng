@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { LikeIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils/cn";
@@ -36,7 +36,7 @@ export function ProductListRow({
   className?: string;
 }) {
   const saleRate = calcSaleRate(item.price, item.originalPrice);
-  const Content = item.href ? Link : "div";
+  const Content = item.href ? LocaleLink : "div";
   const contentProps = item.href ? { href: item.href } : {};
 
   return (

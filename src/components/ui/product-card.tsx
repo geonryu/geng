@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { cn } from "@/lib/utils/cn";
 import { calcSaleRate, formatWonUnit } from "@/lib/utils/price";
@@ -37,7 +37,7 @@ export function ProductCard({
   className?: string;
 }) {
   const saleRate = sale ? calcSaleRate(price, sale.originalPrice) : null;
-  const Root = href ? Link : "article";
+  const Root = href ? LocaleLink : "article";
   const rootProps = href ? { href } : {};
 
   return (

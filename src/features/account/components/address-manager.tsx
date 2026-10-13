@@ -9,6 +9,7 @@ import { FormField } from "@/components/ui/form-field";
 import { BoxField } from "@/components/ui/text-field";
 import { addAddress, deleteAddress } from "@/features/account/actions";
 import { FieldError } from "@/features/account/components/field-error";
+import { LocaleField } from "@/i18n/locale-field";
 import type { MemberAddress } from "@/features/account/queries";
 import type { FormState } from "@/features/account/schemas";
 
@@ -75,6 +76,7 @@ export function AddressManager({ addresses }: { addresses: MemberAddress[] }) {
                 </div>
 
                 <form action={deleteAddress}>
+                  <LocaleField />
                   <input type="hidden" name="id" value={item.id} />
                   <Button type="submit" tone="outline" size="sm">
                     삭제
@@ -91,6 +93,7 @@ export function AddressManager({ addresses }: { addresses: MemberAddress[] }) {
           action={formAction}
           className="flex flex-col gap-4 rounded-field border border-line p-6"
         >
+          <LocaleField />
           <h3 className="text-[16px] font-bold text-ink">배송지 추가</h3>
 
           <FormField label="배송지명">

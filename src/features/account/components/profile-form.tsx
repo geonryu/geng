@@ -8,6 +8,7 @@ import { SelectField } from "@/components/ui/select-field";
 import { BoxField } from "@/components/ui/text-field";
 import { updateProfile } from "@/features/account/actions";
 import { FieldError } from "@/features/account/components/field-error";
+import { LocaleField } from "@/i18n/locale-field";
 import type { Member } from "@/features/account/queries";
 import type { FormState } from "@/features/account/schemas";
 
@@ -39,6 +40,8 @@ export function ProfileForm({ member }: { member: Member }) {
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-6">
+      <LocaleField />
+
       <div className="flex flex-col gap-4">
         <FormField label="아이디">
           <p className="flex h-[45px] items-center rounded-field bg-surface-soft px-5 text-[14px] text-muted">

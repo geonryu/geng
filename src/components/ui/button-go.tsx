@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { cn } from "@/lib/utils/cn";
 import { ArrowUpRightIcon } from "./icons";
 
@@ -35,9 +35,9 @@ export function ButtonGo({
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <LocaleLink href={href} className={classes}>
         {content}
-      </Link>
+      </LocaleLink>
     );
   }
 

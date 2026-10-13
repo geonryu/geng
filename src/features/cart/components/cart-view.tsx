@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useState } from "react";
 
 import { Button, buttonClass } from "@/components/ui/button";
@@ -159,7 +159,7 @@ export function CartView({ initialLines }: { initialLines: CartLine[] }) {
 
             {/* 주문 버튼 — node 277:7760 */}
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:justify-end">
-              <Link
+              <LocaleLink
                 href="/"
                 className={buttonClass({
                   tone: "outline",
@@ -168,7 +168,7 @@ export function CartView({ initialLines }: { initialLines: CartLine[] }) {
                 })}
               >
                 계속 쇼핑하기
-              </Link>
+              </LocaleLink>
               <Button size="md" tone="outline-strong" className="sm:w-[267px]">
                 선택상품 주문하기
               </Button>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 
 import { Container } from "@/components/layout/container";
 import type { ReleaseItem } from "@/features/content/types";
@@ -16,7 +16,7 @@ export function ReleaseStrip({ items }: { items: ReleaseItem[] }) {
       <ul className="flex gap-4 overflow-x-auto px-5 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">
         {items.map((item) => (
           <li key={item.id} className="w-[260px] shrink-0 lg:w-auto">
-            <Link
+            <LocaleLink
               href={item.href}
               className="flex h-[53px] items-center gap-2 rounded-card border border-line bg-white px-3 hover:border-ink"
             >
@@ -33,7 +33,7 @@ export function ReleaseStrip({ items }: { items: ReleaseItem[] }) {
                 <span className="truncate">{item.label}</span>
                 <span className="truncate font-bold">{item.title}</span>
               </span>
-            </Link>
+            </LocaleLink>
           </li>
         ))}
       </ul>

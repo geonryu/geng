@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useState } from "react";
 
 import { Container } from "@/components/layout/container";
@@ -29,7 +29,7 @@ export function SubBannerSection({ items }: { items: SubBannerItem[] }) {
             key={item.id}
             className="flex w-[320px] shrink-0 flex-col sm:w-[440px] lg:w-auto"
           >
-            <Link
+            <LocaleLink
               href={item.href}
               className="relative aspect-[562/336] w-full overflow-hidden rounded-t-card"
             >
@@ -40,7 +40,7 @@ export function SubBannerSection({ items }: { items: SubBannerItem[] }) {
                 sizes="(max-width: 1024px) 80vw, 562px"
                 className="object-cover"
               />
-            </Link>
+            </LocaleLink>
 
             <div className="flex flex-1 flex-col gap-1 rounded-b-card border border-line bg-white px-3 pt-3 pb-4">
               {item.products.map((product) => (

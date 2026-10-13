@@ -9,6 +9,7 @@ import { SelectField } from "@/components/ui/select-field";
 import { BoxField } from "@/components/ui/text-field";
 import { signup } from "@/features/account/actions";
 import { FieldError } from "@/features/account/components/field-error";
+import { LocaleField } from "@/i18n/locale-field";
 import { TermsAgreement } from "@/features/account/components/terms-agreement";
 import type { FormState } from "@/features/account/schemas";
 
@@ -60,6 +61,8 @@ export function SignupForm() {
       action={formAction}
       className="mx-auto flex w-full max-w-[550px] flex-col gap-6"
     >
+      <LocaleField />
+
       <div className="flex flex-col gap-4">
         <FormField label="회원구분" required>
           <SegmentedToggle

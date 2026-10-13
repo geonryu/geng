@@ -20,6 +20,7 @@ import {
 import { getCurrentMember } from "@/features/account/queries";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { DEFAULT_LOCALE, isLocale, localeHref, type Locale } from "@/i18n/config";
 
 /**
  * 회원 서버 액션 — 가입 · 로그인 · 로그아웃.
@@ -31,6 +32,25 @@ import { createClient } from "@/lib/supabase/server";
  * dev 프로젝트는 이메일 확인(Confirm email)을 꺼 두는 것을 전제로 한다.
  * 켜져 있으면 가입 직후 세션이 생기지 않아 완료 화면에서 로그인 상태가 아니다.
  */
+
+/**
+ * 폼이 실어 보낸 로케일. Server Action 에서는 `next/root-params` 를 쓸 수 없어서
+ * LocaleField 가 hidden 으로 넣어준 값을 읽는다. 없으면 기본 로케일로 본다.
+ */
+function localeOf(formData: FormData): Locale {
+  const value = String(formData.get("locale") ?? "");
+  return isLocale(value) ? value : DEFAULT_LOCALE;
+}
+
+/** 로케일을 유지한 내부 경로. */
+function pathFor(locale: Locale, path: string) {
+  return localeHref(locale, path);
+}
+
+/** 보호 경로에서 로그인으로 돌려보낼 때. */
+function loginFor(locale: Locale, nextPath: string) {
+  return `${localeHref(locale, "/login")}?next=${encodeURIComponent(localeHref(locale, nextPath))}`;
+}
 
 /** FormData 를 평범한 객체로. 체크박스(terms)는 여러 값이 올 수 있다. */
 function toObject(formData: FormData) {
@@ -143,7 +163,7 @@ export async function signup(
     })),
   );
 
-  redirect("/signup/complete");
+  redirect(pathFor(localeOf(formData), "/signup/complete"));
 }
 
 export async function login(
@@ -157,7 +177,10 @@ export async function login(
   // proxy 가 보호 경로에서 돌려보냈다면 원래 가려던 곳으로 되돌린다.
   // 외부 도메인으로 튕기지 않도록 내부 경로만 허용한다.
   const nextRaw = String(formData.get("next") ?? "");
-  const nextPath = nextRaw.startsWith("/") && !nextRaw.startsWith("//") ? nextRaw : "/mypage";
+  const nextPath =
+    nextRaw.startsWith("/") && !nextRaw.startsWith("//")
+      ? nextRaw
+      : pathFor(localeOf(formData), "/mypage");
   const parsed = loginSchema.safeParse(raw);
 
   if (!parsed.success) {
@@ -195,10 +218,10 @@ export async function login(
   redirect(nextPath);
 }
 
-export async function logout() {
+export async function logout(formData: FormData) {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  redirect(pathFor(localeOf(formData), "/"));
 }
 
 export async function updateProfile(
@@ -206,7 +229,7 @@ export async function updateProfile(
   formData: FormData,
 ): Promise<FormState> {
   const member = await getCurrentMember();
-  if (!member) redirect("/login?next=/mypage/profile");
+  if (!member) redirect(loginFor(localeOf(formData), "/mypage/profile"));
 
   const raw = {
     name: String(formData.get("name") ?? ""),
@@ -252,7 +275,7 @@ export async function addAddress(
   formData: FormData,
 ): Promise<FormState> {
   const member = await getCurrentMember();
-  if (!member) redirect("/login?next=/mypage/addresses");
+  if (!member) redirect(loginFor(localeOf(formData), "/mypage/addresses"));
 
   const raw = {
     label: String(formData.get("label") ?? ""),
@@ -306,7 +329,7 @@ export async function addAddress(
 
 export async function deleteAddress(formData: FormData) {
   const member = await getCurrentMember();
-  if (!member) redirect("/login?next=/mypage/addresses");
+  if (!member) redirect(loginFor(localeOf(formData), "/mypage/addresses"));
 
   const id = String(formData.get("id") ?? "");
   if (!id) return;
@@ -335,7 +358,7 @@ export async function withdraw(
   formData: FormData,
 ): Promise<FormState> {
   const member = await getCurrentMember();
-  if (!member) redirect("/login");
+  if (!member) redirect(pathFor(localeOf(formData), "/login"));
 
   const typed = String(formData.get("confirmLoginId") ?? "").trim();
   if (typed !== member.loginId) {
@@ -353,7 +376,7 @@ export async function withdraw(
 
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  redirect(pathFor(localeOf(formData), "/"));
 }
 
 /** 아이디 일부를 가린다. "kimgenrang" → "kimge*****" */

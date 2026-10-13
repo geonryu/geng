@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -84,20 +84,20 @@ export function FindAccountForm({ mode }: { mode: "id" | "password" }) {
       </Button>
 
       <nav className="flex items-center justify-center text-[13px] text-muted">
-        <Link href="/login" className="px-[6px] py-[10px] hover:text-ink">
+        <LocaleLink href="/login" className="px-[6px] py-[10px] hover:text-ink">
           로그인
-        </Link>
+        </LocaleLink>
         <span aria-hidden="true">|</span>
-        <Link
+        <LocaleLink
           href={mode === "id" ? "/find-password" : "/find-id"}
           className="px-[6px] py-[10px] hover:text-ink"
         >
           {mode === "id" ? "비밀번호 찾기" : "아이디 찾기"}
-        </Link>
+        </LocaleLink>
         <span aria-hidden="true">|</span>
-        <Link href="/signup" className="px-[6px] py-[10px] text-ink">
+        <LocaleLink href="/signup" className="px-[6px] py-[10px] text-ink">
           회원가입
-        </Link>
+        </LocaleLink>
       </nav>
     </form>
   );

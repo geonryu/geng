@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { useActionState, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { SegmentedToggle } from "@/components/ui/segmented-toggle";
 import { TextField } from "@/components/ui/text-field";
 import { login } from "@/features/account/actions";
 import { FieldError } from "@/features/account/components/field-error";
+import { LocaleField } from "@/i18n/locale-field";
 import type { FormState } from "@/features/account/schemas";
 
 /**
@@ -60,6 +61,8 @@ export function LoginForm({
       action={isMember ? formAction : undefined}
       className="mx-auto flex w-full max-w-[550px] flex-col gap-6"
     >
+      <LocaleField />
+
       <SegmentedToggle
         items={[
           { id: "member", label: "회원" },
@@ -102,20 +105,20 @@ export function LoginForm({
       </Button>
 
       <nav className="flex items-center justify-center text-[13px] text-muted">
-        <Link href="/find-id" className="px-[6px] py-[10px] hover:text-ink">
+        <LocaleLink href="/find-id" className="px-[6px] py-[10px] hover:text-ink">
           아이디 찾기
-        </Link>
+        </LocaleLink>
         <span aria-hidden="true">|</span>
-        <Link
+        <LocaleLink
           href="/find-password"
           className="px-[6px] py-[10px] hover:text-ink"
         >
           비밀번호 찾기
-        </Link>
+        </LocaleLink>
         <span aria-hidden="true">|</span>
-        <Link href="/signup" className="px-[6px] py-[10px] text-ink">
+        <LocaleLink href="/signup" className="px-[6px] py-[10px] text-ink">
           회원가입
-        </Link>
+        </LocaleLink>
       </nav>
 
       {showGuestOrder && (
