@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { HistoryPanel } from "@/features/account/components/history-panel";
 import { MyPageShell } from "@/features/account/components/mypage-shell";
+import { getCurrentMember, getMemberSummary } from "@/features/account/queries";
 import { MEMBER } from "@/features/account/mypage-data";
 
 export const metadata: Metadata = {
@@ -36,7 +38,12 @@ const SUMMARY = [
   { label: "환불예정 적립금", value: "0원" },
 ];
 
-export default function MyPagePointsPage() {
+export default async function MyPagePointsPage() {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage/points");
+
+  const summary = await getMemberSummary(member.id);
+
   return (
     <>
       <Breadcrumb
@@ -47,7 +54,7 @@ export default function MyPagePointsPage() {
         ]}
       />
 
-      <MyPageShell activeHref="/mypage/points">
+      <MyPageShell member={member} summary={summary} activeHref="/mypage/points">
         <div className="flex flex-col gap-2">
           <h1 className="text-[24px] font-bold text-ink">나의 적립금</h1>
           <p className="text-[14px] text-muted">

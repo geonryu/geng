@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { HistoryPanel } from "@/features/account/components/history-panel";
 import { MyPageShell } from "@/features/account/components/mypage-shell";
+import { getCurrentMember, getMemberSummary } from "@/features/account/queries";
 import { ORDER_STATUS, RECENT_ORDERS } from "@/features/account/mypage-data";
 
 export const metadata: Metadata = {
@@ -19,7 +21,12 @@ const COLUMNS = [
   { key: "status", label: "배송현황", width: 130 },
 ];
 
-export default function MyPageOrdersPage() {
+export default async function MyPageOrdersPage() {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage/orders");
+
+  const summary = await getMemberSummary(member.id);
+
   return (
     <>
       <Breadcrumb
@@ -30,7 +37,7 @@ export default function MyPageOrdersPage() {
         ]}
       />
 
-      <MyPageShell activeHref="/mypage/orders">
+      <MyPageShell member={member} summary={summary} activeHref="/mypage/orders">
         <div className="flex w-full items-stretch overflow-x-auto rounded-field border border-line bg-white">
           <div className="flex h-[98px] w-[162px] shrink-0 flex-col justify-center gap-2 pl-5">
             <p className="text-[16px] font-bold text-ink">주문내역</p>

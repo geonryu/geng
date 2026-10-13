@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { ChevronRightIcon } from "@/components/ui/icons";
@@ -8,45 +9,53 @@ import { InfoStrip } from "@/components/ui/info-strip";
 import { StatCard } from "@/components/ui/stat-card";
 import { MyPageShell } from "@/features/account/components/mypage-shell";
 import { ORDER_STATUS, THUMBNAILS } from "@/features/account/mypage-data";
+import { getCurrentMember, getMemberSummary } from "@/features/account/queries";
+import { formatWon } from "@/lib/utils/price";
 
 export const metadata: Metadata = {
   title: "마이페이지 | Gen.G Online Store",
 };
 
 /** 마이페이지 — Figma 최종화면 / 마이페이지_PC (node 277:6331) */
-export default function MyPage() {
+export default async function MyPage() {
+  // proxy 가 먼저 걸러내지만 그건 낙관적 검사일 뿐이다. 실제 판단은 여기서 한다.
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage");
+
+  const summary = await getMemberSummary(member.id);
+
   return (
     <>
       <Breadcrumb items={[{ label: "홈", href: "/" }, { label: "마이페이지" }]} />
 
-      <MyPageShell activeHref="/mypage">
+      <MyPageShell member={member} summary={summary} activeHref="/mypage">
         {/* 요약 카드 — node 277:6449 */}
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard
             iconSrc="/assets/icons/stat-orders.svg"
             title="총주문"
             values={[
-              { amount: "0", unit: "원" },
-              { amount: "0", unit: "회" },
+              { amount: formatWon(summary.totalOrderAmount), unit: "원" },
+              { amount: String(summary.orderCount), unit: "회" },
             ]}
           />
           <StatCard
             iconSrc="/assets/icons/stat-coupon.svg"
             title="쿠폰"
-            values={[{ amount: "0", unit: "장" }]}
+            values={[{ amount: String(summary.coupons), unit: "장" }]}
           />
           <StatCard
             iconSrc="/assets/icons/stat-points.svg"
             title="총적립금"
-            values={[{ amount: "0", unit: "원" }]}
+            values={[{ amount: formatWon(summary.points), unit: "원" }]}
           />
         </div>
 
         <InfoStrip
           cells={[
-            { label: "가용적립금", value: "0원" },
+            { label: "가용적립금", value: `${formatWon(summary.points)}원` },
             { label: "사용적립금", value: "0원" },
-            { label: "예치금", value: "0원" },
+            { label: "예치금", value: `${formatWon(summary.deposit)}원` },
           ]}
         />
 

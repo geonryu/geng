@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { Container } from "@/components/layout/container";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { CheckMarkIcon } from "@/components/ui/icons";
 import { Logo } from "@/components/ui/logo";
+import { getCurrentMember } from "@/features/account/queries";
 
 export const metadata: Metadata = {
   title: "회원 가입 완료 | Gen.G Online Store",
 };
 
 /** 회원가입 완료 — Figma 최종화면 / 회원가입완료_PC (node 277:5909) */
-export default function SignupCompletePage() {
-  const memberId = "kimgenrang";
-  const email = "kimgenrang@gmail.com";
+export default async function SignupCompletePage() {
+  // 가입 직후 세션으로 본인 정보를 읽는다. 세션이 없으면(직접 URL 진입 등)
+  // 보여줄 게 없으므로 로그인으로 보낸다.
+  const member = await getCurrentMember();
+  if (!member) redirect("/login");
+
+  const memberId = member.loginId;
+  const email = member.email;
 
   return (
     <Container className="flex flex-col gap-[50px] py-5 lg:pt-[20px] lg:pb-[100px]">

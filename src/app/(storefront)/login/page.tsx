@@ -16,11 +16,12 @@ export const metadata: Metadata = {
 export default async function LoginPage(props: PageProps<"/login">) {
   const search = await props.searchParams;
   const fromCart = search.from === "cart";
+  const nextPath = typeof search.next === "string" ? search.next : undefined;
 
   return (
     <Container className="flex flex-col gap-[50px] py-5 lg:pt-[20px] lg:pb-[100px]">
       <Breadcrumb items={[{ label: "홈", href: "/" }, { label: "로그인" }]} />
-      <LoginForm showGuestOrder={fromCart} />
+      <LoginForm showGuestOrder={fromCart} nextPath={nextPath} />
     </Container>
   );
 }

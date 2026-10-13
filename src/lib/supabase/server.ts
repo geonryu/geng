@@ -13,8 +13,10 @@ import { requireSupabaseEnv } from "@/lib/supabase/env";
  * 세션 갱신은 src/proxy.ts 가 책임지므로 여기서는 조용히 무시한다.
  */
 export async function createClient() {
-  const { url, anonKey } = requireSupabaseEnv();
+  // cookies() 를 먼저 건드린다. 이 호출이 라우트를 동적으로 표시하므로,
+  // 환경변수 검사보다 앞에 와야 빌드 타임 프리렌더가 이 경로로 들어오지 않는다.
   const cookieStore = await cookies();
+  const { url, anonKey } = requireSupabaseEnv();
 
   return createServerClient(url, anonKey, {
     cookies: {

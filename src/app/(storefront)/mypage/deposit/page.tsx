@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { HistoryPanel } from "@/features/account/components/history-panel";
 import { MyPageShell } from "@/features/account/components/mypage-shell";
+import { getCurrentMember, getMemberSummary } from "@/features/account/queries";
 
 export const metadata: Metadata = {
   title: "예치금 조회 | Gen.G Online Store",
@@ -27,7 +29,12 @@ const ROWS = Array.from({ length: 10 }, () => ({
   detail: "내용",
 }));
 
-export default function MyPageDepositPage() {
+export default async function MyPageDepositPage() {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage/deposit");
+
+  const summary = await getMemberSummary(member.id);
+
   return (
     <>
       <Breadcrumb
@@ -38,7 +45,7 @@ export default function MyPageDepositPage() {
         ]}
       />
 
-      <MyPageShell activeHref="/mypage/deposit">
+      <MyPageShell member={member} summary={summary} activeHref="/mypage/deposit">
         <div className="flex flex-col gap-2">
           <h1 className="text-[24px] font-bold text-ink">예치금 조회</h1>
           <p className="text-[14px] text-muted">
