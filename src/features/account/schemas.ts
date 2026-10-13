@@ -142,3 +142,37 @@ function isRealDate(year: string, month: string, day: string) {
     date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d
   );
 }
+
+/** 회원정보 수정 — 아이디·이메일은 식별자라 여기서 바꾸지 않는다. */
+export const profileSchema = z.object({
+  name: z.string().trim().min(1, { error: "이름을 입력해주세요." }),
+  phonePrefix: z.string().trim().optional(),
+  phoneMid: z.string().trim().optional(),
+  phoneLast: z.string().trim().optional(),
+  postcode: z.string().trim().optional(),
+  address: z.string().trim().optional(),
+  addressDetail: z.string().trim().optional(),
+});
+
+/** 배송지 추가 */
+export const addressSchema = z.object({
+  label: z.string().trim().optional(),
+  recipient: z.string().trim().min(1, { error: "받는 분을 입력해주세요." }),
+  phone: z.string().trim().optional(),
+  postcode: z.string().trim().min(1, { error: "우편번호를 입력해주세요." }),
+  address: z.string().trim().min(1, { error: "주소를 입력해주세요." }),
+  addressDetail: z.string().trim().optional(),
+  isDefault: z.boolean().default(false),
+});
+
+/** 아이디 찾기 — 가입 시 쓴 이름 + 이메일로 조회한다. */
+export const findIdSchema = z.object({
+  name: z.string().trim().min(1, { error: "이름을 입력해주세요." }),
+  email: z.email({ error: "올바른 이메일 형식이 아닙니다." }),
+});
+
+/** 비밀번호 찾기 — 아이디 + 이메일이 모두 맞아야 재설정 메일을 보낸다. */
+export const findPasswordSchema = z.object({
+  loginId: z.string().trim().min(1, { error: "아이디를 입력해주세요." }),
+  email: z.email({ error: "올바른 이메일 형식이 아닙니다." }),
+});

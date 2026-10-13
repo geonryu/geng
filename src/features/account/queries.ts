@@ -115,3 +115,38 @@ export const getMemberSummary = cache(
     };
   },
 );
+
+export type MemberAddress = {
+  id: number;
+  label: string | null;
+  recipient: string;
+  phone: string | null;
+  postcode: string;
+  address: string;
+  addressDetail: string | null;
+  isDefault: boolean;
+};
+
+/** 배송주소록 — 기본 배송지가 맨 위로 온다. */
+export const listAddresses = cache(
+  async (memberId: string): Promise<MemberAddress[]> => {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("member_addresses")
+      .select("id, label, recipient, phone, postcode, address, address_detail, is_default")
+      .eq("member_id", memberId)
+      .order("is_default", { ascending: false })
+      .order("created_at", { ascending: false });
+
+    return (data ?? []).map((row) => ({
+      id: row.id,
+      label: row.label,
+      recipient: row.recipient,
+      phone: row.phone,
+      postcode: row.postcode,
+      address: row.address,
+      addressDetail: row.address_detail,
+      isDefault: row.is_default,
+    }));
+  },
+);

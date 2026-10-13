@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import {
@@ -7,11 +8,16 @@ import {
   REQUIRED_TERMS,
   birthDateOf,
   emailOf,
+  addressSchema,
+  findIdSchema,
+  findPasswordSchema,
   loginSchema,
   phoneOf,
+  profileSchema,
   signupSchema,
   type FormState,
 } from "@/features/account/schemas";
+import { getCurrentMember } from "@/features/account/queries";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -193,4 +199,243 @@ export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/");
+}
+
+export async function updateProfile(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage/profile");
+
+  const raw = {
+    name: String(formData.get("name") ?? ""),
+    phonePrefix: String(formData.get("phonePrefix") ?? ""),
+    phoneMid: String(formData.get("phoneMid") ?? ""),
+    phoneLast: String(formData.get("phoneLast") ?? ""),
+    postcode: String(formData.get("postcode") ?? ""),
+    address: String(formData.get("address") ?? ""),
+    addressDetail: String(formData.get("addressDetail") ?? ""),
+  };
+  const parsed = profileSchema.safeParse(raw);
+
+  if (!parsed.success) {
+    return {
+      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+      values: raw,
+    };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("members")
+    .update({
+      name: parsed.data.name,
+      phone: phoneOf(parsed.data),
+      postcode: parsed.data.postcode || null,
+      address: parsed.data.address || null,
+      address_detail: parsed.data.addressDetail || null,
+    })
+    .eq("id", member.id);
+
+  if (error) {
+    return { message: `저장에 실패했습니다. (${error.message})`, values: raw };
+  }
+
+  revalidatePath("/mypage/profile");
+  revalidatePath("/mypage");
+  return { message: "회원정보가 저장되었습니다." };
+}
+
+export async function addAddress(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage/addresses");
+
+  const raw = {
+    label: String(formData.get("label") ?? ""),
+    recipient: String(formData.get("recipient") ?? ""),
+    phone: String(formData.get("phone") ?? ""),
+    postcode: String(formData.get("postcode") ?? ""),
+    address: String(formData.get("address") ?? ""),
+    addressDetail: String(formData.get("addressDetail") ?? ""),
+    isDefault: formData.get("isDefault") === "on",
+  };
+  const parsed = addressSchema.safeParse(raw);
+
+  if (!parsed.success) {
+    return {
+      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+      values: { ...raw, isDefault: String(raw.isDefault) },
+    };
+  }
+
+  const supabase = await createClient();
+
+  // 기본 배송지는 하나뿐이다(0001 의 부분 유니크 인덱스). 새로 지정하면 기존 것을 내린다.
+  if (parsed.data.isDefault) {
+    await supabase
+      .from("member_addresses")
+      .update({ is_default: false })
+      .eq("member_id", member.id);
+  }
+
+  const { error } = await supabase.from("member_addresses").insert({
+    member_id: member.id,
+    label: parsed.data.label || null,
+    recipient: parsed.data.recipient,
+    phone: parsed.data.phone || null,
+    postcode: parsed.data.postcode,
+    address: parsed.data.address,
+    address_detail: parsed.data.addressDetail || null,
+    is_default: parsed.data.isDefault,
+  });
+
+  if (error) {
+    return {
+      message: `배송지 추가에 실패했습니다. (${error.message})`,
+      values: { ...raw, isDefault: String(raw.isDefault) },
+    };
+  }
+
+  revalidatePath("/mypage/addresses");
+  return { message: "배송지가 추가되었습니다." };
+}
+
+export async function deleteAddress(formData: FormData) {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login?next=/mypage/addresses");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const supabase = await createClient();
+  // RLS 로도 막히지만 member_id 조건을 명시해 두 겹으로 건다.
+  await supabase
+    .from("member_addresses")
+    .delete()
+    .eq("id", id)
+    .eq("member_id", member.id);
+
+  revalidatePath("/mypage/addresses");
+}
+
+/**
+ * 회원탈퇴 — 되돌릴 수 없다.
+ *
+ * auth 사용자를 지우면 members 가 on delete cascade 로 함께 지워지고,
+ * member_agreements · member_addresses · carts · wishlists 도 연쇄로 정리된다.
+ * unified_orders 는 member_id 가 null 로만 풀린다 — 주문 원본은 채널 소유라
+ * 여기서 지우지 않는다 (AGENTS.md §1).
+ */
+export async function withdraw(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const member = await getCurrentMember();
+  if (!member) redirect("/login");
+
+  const typed = String(formData.get("confirmLoginId") ?? "").trim();
+  if (typed !== member.loginId) {
+    return {
+      errors: { confirmLoginId: ["아이디가 일치하지 않습니다."] },
+    };
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.deleteUser(member.id);
+
+  if (error) {
+    return { message: `탈퇴 처리에 실패했습니다. (${error.message})` };
+  }
+
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
+}
+
+/** 아이디 일부를 가린다. "kimgenrang" → "kimge*****" */
+function maskLoginId(loginId: string) {
+  const shown = Math.max(1, Math.ceil(loginId.length / 2));
+  return loginId.slice(0, shown) + "*".repeat(loginId.length - shown);
+}
+
+export async function findId(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const raw = {
+    name: String(formData.get("name") ?? ""),
+    email: String(formData.get("email") ?? ""),
+  };
+  const parsed = findIdSchema.safeParse(raw);
+
+  if (!parsed.success) {
+    return {
+      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+      values: raw,
+    };
+  }
+
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("members")
+    .select("login_id")
+    .eq("name", parsed.data.name)
+    .eq("email", parsed.data.email)
+    .maybeSingle();
+
+  if (!data) {
+    return {
+      message: "일치하는 회원 정보를 찾을 수 없습니다.",
+      values: raw,
+    };
+  }
+
+  // 전체 아이디를 그대로 노출하지 않는다.
+  return {
+    message: `회원님의 아이디는 ${maskLoginId(data.login_id)} 입니다.`,
+    values: raw,
+  };
+}
+
+export async function findPassword(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const raw = {
+    loginId: String(formData.get("loginId") ?? ""),
+    email: String(formData.get("email") ?? ""),
+  };
+  const parsed = findPasswordSchema.safeParse(raw);
+
+  if (!parsed.success) {
+    return {
+      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+      values: raw,
+    };
+  }
+
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("members")
+    .select("email")
+    .eq("login_id", parsed.data.loginId)
+    .eq("email", parsed.data.email)
+    .maybeSingle();
+
+  // 가입 여부가 드러나지 않도록 결과와 무관하게 같은 문구를 돌려준다.
+  const sent: FormState = {
+    message:
+      "입력하신 정보가 확인되면 비밀번호 재설정 메일을 보내드립니다. 메일함을 확인해주세요.",
+    values: raw,
+  };
+
+  if (!data) return sent;
+
+  const supabase = await createClient();
+  await supabase.auth.resetPasswordForEmail(data.email);
+  return sent;
 }
