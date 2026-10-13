@@ -41,14 +41,34 @@ function toSummary(row: ProductRow): ProductSummary {
 
 const SUMMARY_COLUMNS = "id, slug, name, price, original_price, thumbnail_src";
 
-/** 진열 중인 상품 목록. */
+export type ProductCategory = "pro" | "genrang" | "goods" | "collab";
+
+/** GNB 진열 뷰 — 분류(pro·genrang)와 정렬·필터(new·best·sale·all)를 함께 받는다. */
+export type ProductListView =
+  | { kind: "all" }
+  | { kind: "new" }
+  | { kind: "best" }
+  | { kind: "sale" }
+  | { kind: "category"; category: ProductCategory };
+
+/**
+ * 진열 중인 상품 목록.
+ *
+ * best 는 원래 판매량 기준이어야 하는데 주문 데이터가 아직 안 쌓여 최신순으로 둔다.
+ * unified_orders 적재가 시작되면 집계 기준으로 교체한다 (0006 마이그레이션 주석 참고).
+ */
 export const listProducts = cache(
-  async (limit = 20): Promise<ProductSummary[]> => {
+  async (view: ProductListView = { kind: "all" }, limit = 40): Promise<ProductSummary[]> => {
     const supabase = await createClient();
-    const { data } = await supabase
+    let query = supabase
       .from("products")
       .select(SUMMARY_COLUMNS)
-      .in("status", ["display", "on_sale"])
+      .in("status", ["display", "on_sale"]);
+
+    if (view.kind === "sale") query = query.not("original_price", "is", null);
+    if (view.kind === "category") query = query.eq("category", view.category);
+
+    const { data } = await query
       .order("created_at", { ascending: false })
       .limit(limit);
 

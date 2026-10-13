@@ -13,3 +13,4 @@
 --   · 결제·정산 테이블은 의도적으로 없다. Phase 2 다.
 --   · unified_orders 는 트리거로 service role 외 쓰기를 거부한다.
 --   · products.stock 은 마스터 재고(표시·push용)이고 주문 시점 차감을 하지 않는다.
+--   0006_product_category.sql  상품 분류(pro/genrang/goods/collab)        [내 DB 소유]
