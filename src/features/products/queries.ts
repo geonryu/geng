@@ -1,5 +1,6 @@
 import { cache } from "react";
 
+import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -59,6 +60,8 @@ export type ProductListView =
  */
 export const listProducts = cache(
   async (view: ProductListView = { kind: "all" }, limit = 40): Promise<ProductSummary[]> => {
+    if (!hasSupabaseEnv()) return [];
+
     const supabase = await createClient();
     let query = supabase
       .from("products")
@@ -79,6 +82,8 @@ export const listProducts = cache(
 /** 회원이 찜한 상품. */
 export const listWishlistProducts = cache(
   async (memberId: string): Promise<ProductSummary[]> => {
+    if (!hasSupabaseEnv()) return [];
+
     const supabase = await createClient();
     const { data } = await supabase
       .from("wishlists")
@@ -107,6 +112,8 @@ export type MemberReview = {
 /** 회원이 쓴 상품후기 — 마이페이지 > 상품후기 */
 export const listMemberReviews = cache(
   async (memberId: string): Promise<MemberReview[]> => {
+    if (!hasSupabaseEnv()) return [];
+
     const supabase = await createClient();
     const { data } = await supabase
       .from("product_reviews")

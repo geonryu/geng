@@ -19,6 +19,7 @@ import {
 } from "@/features/account/schemas";
 import { getCurrentMember } from "@/features/account/queries";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_LOCALE, isLocale, localeHref, type Locale } from "@/i18n/config";
 
@@ -41,6 +42,15 @@ function localeOf(formData: FormData): Locale {
   const value = String(formData.get("locale") ?? "");
   return isLocale(value) ? value : DEFAULT_LOCALE;
 }
+
+/**
+ * Supabase 가 아직 연결되지 않았을 때 돌려줄 상태.
+ * 환경변수가 없으면 createClient 가 throw 해 500 이 되므로 그 전에 막는다.
+ */
+const NOT_CONFIGURED: FormState = {
+  message:
+    "데이터베이스가 아직 연결되지 않았습니다. 잠시 후 다시 시도해주세요.",
+};
 
 /** 로케일을 유지한 내부 경로. */
 function pathFor(locale: Locale, path: string) {
@@ -88,6 +98,8 @@ export async function signup(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const raw = toObject(formData);
   const parsed = signupSchema.safeParse(raw);
 
@@ -170,6 +182,8 @@ export async function login(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const raw = {
     loginId: String(formData.get("loginId") ?? ""),
     password: String(formData.get("password") ?? ""),
@@ -219,6 +233,8 @@ export async function login(
 }
 
 export async function logout(formData: FormData) {
+  if (!hasSupabaseEnv()) redirect(pathFor(localeOf(formData), "/"));
+
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect(pathFor(localeOf(formData), "/"));
@@ -228,6 +244,8 @@ export async function updateProfile(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const member = await getCurrentMember();
   if (!member) redirect(loginFor(localeOf(formData), "/mypage/profile"));
 
@@ -274,6 +292,8 @@ export async function addAddress(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const member = await getCurrentMember();
   if (!member) redirect(loginFor(localeOf(formData), "/mypage/addresses"));
 
@@ -328,6 +348,8 @@ export async function addAddress(
 }
 
 export async function deleteAddress(formData: FormData) {
+  if (!hasSupabaseEnv()) return;
+
   const member = await getCurrentMember();
   if (!member) redirect(loginFor(localeOf(formData), "/mypage/addresses"));
 
@@ -357,6 +379,8 @@ export async function withdraw(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const member = await getCurrentMember();
   if (!member) redirect(pathFor(localeOf(formData), "/login"));
 
@@ -389,6 +413,8 @@ export async function findId(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const raw = {
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
@@ -428,6 +454,8 @@ export async function findPassword(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  if (!hasSupabaseEnv()) return NOT_CONFIGURED;
+
   const raw = {
     loginId: String(formData.get("loginId") ?? ""),
     email: String(formData.get("email") ?? ""),

@@ -1,5 +1,6 @@
 import { cache } from "react";
 
+import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -32,6 +33,8 @@ export type Member = {
  * 그대로 믿기 때문에 서버에서 신뢰 판단에 쓰면 안 된다.
  */
 export const getCurrentMember = cache(async (): Promise<Member | null> => {
+  if (!hasSupabaseEnv()) return null;
+
   const supabase = await createClient();
 
   const {
@@ -88,8 +91,19 @@ export type MemberSummary = {
   wishlistCount: number;
 };
 
+const EMPTY_SUMMARY: MemberSummary = {
+  totalOrderAmount: 0,
+  orderCount: 0,
+  points: 0,
+  deposit: 0,
+  coupons: 0,
+  wishlistCount: 0,
+};
+
 export const getMemberSummary = cache(
   async (memberId: string): Promise<MemberSummary> => {
+    if (!hasSupabaseEnv()) return EMPTY_SUMMARY;
+
     const supabase = await createClient();
 
     const [orders, wishlist] = await Promise.all([
@@ -130,6 +144,8 @@ export type MemberAddress = {
 /** 배송주소록 — 기본 배송지가 맨 위로 온다. */
 export const listAddresses = cache(
   async (memberId: string): Promise<MemberAddress[]> => {
+    if (!hasSupabaseEnv()) return [];
+
     const supabase = await createClient();
     const { data } = await supabase
       .from("member_addresses")
