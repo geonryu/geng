@@ -1,3 +1,15 @@
 -- Gen.G Online Store — Supabase (PostgreSQL) 스키마
--- 실제 테이블 정의는 db/migrations/ 의 마이그레이션으로만 반영한다.
+-- 실제 테이블 정의는 src/db/migrations/ 의 마이그레이션으로만 반영한다.
 -- 이 파일은 현재 스키마의 참조용 스냅샷이다. (임의 테이블 생성 금지 — AGENTS.md §4)
+--
+-- 적용 순서
+--   0001_members.sql        회원 · 약관동의 · 배송지 · 외부몰 회원매핑   [내 DB 소유]
+--   0002_products.sql       상품 · 옵션 · 이미지 · 스펙 · 후기 · 문의     [draft=내 소유 / mirror=외부몰 원본]
+--   0003_cart_wishlist.sql  장바구니 · 찜                                 [내 DB 소유]
+--   0004_unified_orders.sql 통합 주문 read-model                          [외부 채널 소유 — 되쓰기 차단]
+--   0005_content.sql        배너 · 릴리즈 · 진열 탭                       [내 DB 소유]
+--
+-- 경계 요약
+--   · 결제·정산 테이블은 의도적으로 없다. Phase 2 다.
+--   · unified_orders 는 트리거로 service role 외 쓰기를 거부한다.
+--   · products.stock 은 마스터 재고(표시·push용)이고 주문 시점 차감을 하지 않는다.
