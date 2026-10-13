@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# iCloud 동기화가 만드는 중복 사본 (~/Documents 가 동기화 대상)
+* 2.*
+* 2

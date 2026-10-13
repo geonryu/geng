@@ -6,8 +6,8 @@
 export type ProductOption = {
   id: string;
   label: string;
-  /** 옵션별 추가금이 없으면 상품가를 그대로 쓴다 */
-  price: string;
+  /** 옵션별 추가금이 없으면 상품가를 그대로 쓴다 (원 단위 정수) */
+  price: number;
 };
 
 /** 상품설명 탭의 스펙 표 — node 290:14795 */
@@ -45,7 +45,8 @@ export type ProductQuestion = {
 export type ProductDetail = {
   slug: string;
   name: string;
-  price: string;
+  /** 판매가 (원 단위 정수) */
+  price: number;
   shippingNotice: string;
   breadcrumb: { label: string; href?: string }[];
   gallery: { id: string; src: string; alt: string }[];

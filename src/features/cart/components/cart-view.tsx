@@ -9,12 +9,9 @@ import { NoticeBox } from "@/components/ui/notice-box";
 import { SegmentedToggle } from "@/components/ui/segmented-toggle";
 import { SummaryBar } from "@/components/ui/summary-bar";
 import { CartEmpty } from "@/features/cart/components/cart-empty";
-import {
-  CartTable,
-  formatWon,
-  toNumber,
-} from "@/features/cart/components/cart-table";
+import { CartTable } from "@/features/cart/components/cart-table";
 import type { CartLine } from "@/features/cart/types";
+import { formatWon } from "@/lib/utils/price";
 
 /**
  * 장바구니 — node 277:7622(상품있음) · 277:6305(상품없음)
@@ -71,7 +68,7 @@ export function CartView({ initialLines }: { initialLines: CartLine[] }) {
     selectedIds.includes(line.id),
   );
   const itemTotal = selectedLines.reduce(
-    (sum, line) => sum + toNumber(line.price) * line.quantity,
+    (sum, line) => sum + line.price * line.quantity,
     0,
   );
   const shipping = itemTotal > 0 && itemTotal < FREE_SHIPPING_THRESHOLD ? SHIPPING_FEE : 0;

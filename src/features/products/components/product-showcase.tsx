@@ -173,7 +173,8 @@ function ListBody({ products }: { products: ShowcaseProduct[] }) {
                     imageSrc: product.imageSrc,
                     title: product.title,
                     price: product.price,
-                    saleRate: product.sale?.rate,
+                    originalPrice: product.sale?.originalPrice,
+                    href: product.href,
                   }}
                   liked={liked.includes(product.id)}
                   onToggleLike={() => toggle(product.id)}
@@ -212,6 +213,7 @@ function ShowcaseCard({
       imageAlt={product.imageAlt}
       title={product.title}
       price={product.price}
+      href={product.href}
       titleLines={product.titleLines}
       sale={product.sale}
     />

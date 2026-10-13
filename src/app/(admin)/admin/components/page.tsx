@@ -392,29 +392,29 @@ export default function ComponentsPage() {
                 imageSrc="/assets/images/product-jacket.png"
                 imageAlt="2026 2nd Official Player Jacket"
                 title="2026 2nd Official Player Jacket"
-                price="189,000원"
+                price={189000}
               />
               <ProductCard
                 imageSrc="/assets/images/product-jacket.png"
                 imageAlt="2026 2nd Official Player Self Marking Kit (LOL)"
                 title="2026 2nd Official Player Self Marking Kit (LOL)"
-                price="189,000원"
+                price={189000}
                 titleLines={2}
               />
               <ProductCard
                 imageSrc="/assets/images/product-jacket.png"
                 imageAlt="2026 2nd Official Player Jacket"
                 title="2026 2nd Official Player Jacket"
-                price="94,500원"
-                sale={{ rate: "50%", originalPrice: "189,000원" }}
+                price={94500}
+                sale={{ originalPrice: 189000 }}
               />
               <ProductCard
                 imageSrc="/assets/images/product-jacket.png"
                 imageAlt="2026 2nd Official Player Self Marking Kit (LOL)"
                 title="2026 2nd Official Player Self Marking Kit (LOL)"
-                price="94,500원"
+                price={94500}
                 titleLines={2}
-                sale={{ rate: "50%", originalPrice: "189,000원" }}
+                sale={{ originalPrice: 189000 }}
               />
             </div>
           </Specimen>
@@ -646,12 +646,12 @@ export default function ComponentsPage() {
         >
           <Specimen label="sm · md · lg / 할인 표기">
             <div className="flex flex-wrap items-end gap-12">
-              <Price amount="16,200" size="sm" />
-              <Price amount="189,000" size="md" />
-              <Price amount="189,000" size="lg" />
+              <Price amount={16200} size="sm" />
+              <Price amount={189000} size="md" />
+              <Price amount={189000} size="lg" />
               <Price
-                amount="16,200"
-                originalAmount="18,000"
+                amount={16200}
+                originalAmount={18000}
                 size="sm"
                 align="center"
               />

@@ -9,6 +9,7 @@ import { Price } from "@/components/ui/price";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { SelectField } from "@/components/ui/select-field";
 import type { ProductOption } from "@/features/products/detail-types";
+import { formatWon } from "@/lib/utils/price";
 
 /**
  * 구매 패널 — node 277:8632 (540px)
@@ -22,7 +23,8 @@ export function ProductPurchasePanel({
   options,
 }: {
   name: string;
-  price: string;
+  /** 판매가 (원 단위 정수) */
+  price: number;
   shippingNotice: string;
   options: ProductOption[];
 }) {
@@ -50,7 +52,7 @@ export function ProductPurchasePanel({
 
   const totalCount = selected.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = selected.reduce(
-    (sum, item) => sum + toNumber(item.option.price) * item.quantity,
+    (sum, item) => sum + item.option.price * item.quantity,
     0,
   );
 
@@ -59,7 +61,7 @@ export function ProductPurchasePanel({
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-5">
           <h1 className="text-[20px] font-medium text-ink">{name}</h1>
-          <Price amount={stripUnit(price)} size="lg" />
+          <Price amount={price} size="lg" />
         </div>
 
         <p className="flex items-center gap-1 text-[14px] text-muted">
@@ -118,10 +120,7 @@ export function ProductPurchasePanel({
                   onDecrease={() => setQuantity(option.id, -1)}
                   onIncrease={() => setQuantity(option.id, 1)}
                 />
-                <Price
-                  amount={formatWon(toNumber(option.price) * quantity)}
-                  size="md"
-                />
+                <Price amount={option.price * quantity} size="md" />
               </div>
             </div>
           ))}
@@ -174,17 +173,4 @@ export function ProductPurchasePanel({
       </div>
     </div>
   );
-}
-
-/** "189,000원" → 189000 */
-function toNumber(price: string) {
-  return Number(price.replace(/[^0-9]/g, ""));
-}
-
-function stripUnit(price: string) {
-  return price.replace(/원$/, "");
-}
-
-function formatWon(value: number) {
-  return value.toLocaleString("ko-KR");
 }

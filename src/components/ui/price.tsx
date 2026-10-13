@@ -1,9 +1,12 @@
 import { cn } from "@/lib/utils/cn";
+import { formatWon } from "@/lib/utils/price";
 
 /**
  * 가격 표기 — node 277:7670 (장바구니) · 277:8636 (상품상세)
  * 시안은 숫자만 Bold, 단위("원")는 Regular로 한 단계 작게 쓴다.
  * 할인이 있으면 정가를 취소선으로 위에 올린다.
+ *
+ * 금액은 원 단위 정수로 받고 포맷은 여기서 한다.
  */
 export function Price({
   amount,
@@ -13,9 +16,9 @@ export function Price({
   align = "start",
   className,
 }: {
-  amount: string;
+  amount: number;
   unit?: string;
-  originalAmount?: string;
+  originalAmount?: number;
   size?: "sm" | "md" | "lg";
   align?: "start" | "center";
   className?: string;
@@ -33,14 +36,14 @@ export function Price({
         className,
       )}
     >
-      {originalAmount && (
+      {originalAmount !== undefined && (
         <p className="text-[14px] text-muted line-through">
-          {originalAmount}
+          {formatWon(originalAmount)}
           {unit}
         </p>
       )}
       <p className="flex items-center whitespace-nowrap text-ink">
-        <span className={cn("font-bold", valueSize)}>{amount}</span>
+        <span className={cn("font-bold", valueSize)}>{formatWon(amount)}</span>
         <span className={unitSize}>{unit}</span>
       </p>
     </div>

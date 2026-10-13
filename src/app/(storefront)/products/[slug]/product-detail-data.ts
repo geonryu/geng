@@ -8,7 +8,7 @@ export const PRODUCT_DETAILS: Record<string, ProductDetail> = {
   "2026-2nd-official-player-jacket": {
     slug: "2026-2nd-official-player-jacket",
     name: "2026 2nd Official Player Jacket",
-    price: "189,000원",
+    price: 189000,
     shippingNotice: "3,000원 (70,000원 이상 무료배송)",
     breadcrumb: [
       { label: "홈", href: "/" },
@@ -24,11 +24,11 @@ export const PRODUCT_DETAILS: Record<string, ProductDetail> = {
       { id: "g6", src: "/assets/images/pdp/gallery-06.png", alt: "선수 착용 컷 5" },
     ],
     options: [
-      { id: "s", label: "S", price: "189,000원" },
-      { id: "m", label: "M", price: "189,000원" },
-      { id: "l", label: "L", price: "189,000원" },
-      { id: "xl", label: "XL", price: "189,000원" },
-      { id: "2xl", label: "2XL", price: "189,000원" },
+      { id: "s", label: "S", price: 189000 },
+      { id: "m", label: "M", price: 189000 },
+      { id: "l", label: "L", price: 189000 },
+      { id: "xl", label: "XL", price: 189000 },
+      { id: "2xl", label: "2XL", price: 189000 },
     ],
     detailHeading: ["Gen.G × MUSINSA", "2026 2nd Official Player Jacket"],
     specs: [

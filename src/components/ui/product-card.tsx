@@ -1,16 +1,20 @@
 import Image from "next/image";
+import Link from "next/link";
+
 import { cn } from "@/lib/utils/cn";
+import { calcSaleRate, formatWonUnit } from "@/lib/utils/price";
 
 /**
  * PRODUCT — node 148:2087
  * Default / 2line/default / 1line/sale / 2line/sale 네 개 variant를
  * `titleLines` + `sale` 조합으로 표현한다.
+ *
+ * 금액은 원 단위 정수로 받고, 할인율은 정가·판매가에서 계산한다.
+ * `href`가 있으면 카드 전체가 상품상세로 가는 링크가 된다.
  */
 export type ProductSale = {
-  /** 할인율 표기 (예: "50%") */
-  rate: string;
   /** 정가 */
-  originalPrice: string;
+  originalPrice: number;
 };
 
 export function ProductCard({
@@ -18,6 +22,7 @@ export function ProductCard({
   imageAlt = "",
   title,
   price,
+  href,
   titleLines = 1,
   sale,
   className,
@@ -25,13 +30,21 @@ export function ProductCard({
   imageSrc: string;
   imageAlt?: string;
   title: string;
-  price: string;
+  price: number;
+  href?: string;
   titleLines?: 1 | 2;
   sale?: ProductSale;
   className?: string;
 }) {
+  const saleRate = sale ? calcSaleRate(price, sale.originalPrice) : null;
+  const Root = href ? Link : "article";
+  const rootProps = href ? { href } : {};
+
   return (
-    <article className={cn("flex w-full flex-col gap-4", className)}>
+    <Root
+      {...(rootProps as { href: string })}
+      className={cn("flex w-full flex-col gap-4", className)}
+    >
       <div className="relative aspect-square w-full overflow-hidden">
         <Image
           src={imageSrc}
@@ -62,17 +75,17 @@ export function ProductCard({
         {sale ? (
           <div className="flex flex-col">
             <p className="text-[13px] font-medium line-through">
-              {sale.originalPrice}
+              {formatWonUnit(sale.originalPrice)}
             </p>
             <p className="flex gap-2 text-[16px] font-bold whitespace-nowrap">
-              <span className="text-sale">{sale.rate}</span>
-              <span>{price}</span>
+              {saleRate && <span className="text-sale">{saleRate}</span>}
+              <span>{formatWonUnit(price)}</span>
             </p>
           </div>
         ) : (
-          <p className="text-[16px] font-bold">{price}</p>
+          <p className="text-[16px] font-bold">{formatWonUnit(price)}</p>
         )}
       </div>
-    </article>
+    </Root>
   );
 }

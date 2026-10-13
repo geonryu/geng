@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CloseIcon } from "@/components/ui/icons";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { cn } from "@/lib/utils/cn";
+import { formatWon, formatWonUnit } from "@/lib/utils/price";
 import type { CartLine } from "@/features/cart/types";
 
 /**
@@ -111,7 +112,7 @@ export function CartTable({
                 />
                 <p className="flex items-center whitespace-nowrap text-[14px] text-ink">
                   <span className="font-bold">
-                    {formatWon(toNumber(line.price) * line.quantity)}
+                    {formatWon(line.price * line.quantity)}
                   </span>
                   원
                 </p>
@@ -156,7 +157,7 @@ export function CartTable({
               <div className="flex h-[76px] items-center justify-center">
                 <p className="flex items-center whitespace-nowrap text-[14px] text-ink">
                   <span className="font-bold">
-                    {formatWon(toNumber(line.price) * line.quantity)}
+                    {formatWon(line.price * line.quantity)}
                   </span>
                   원
                 </p>
@@ -202,22 +203,14 @@ function PriceCell({
         align === "center" ? "items-center" : "items-start",
       )}
     >
-      {line.originalPrice && (
+      {line.originalPrice !== undefined && (
         <p className="text-[14px] text-muted line-through">
-          {line.originalPrice}
+          {formatWonUnit(line.originalPrice)}
         </p>
       )}
       <p className="flex items-center whitespace-nowrap text-[14px] text-ink">
-        <span className="font-bold">{line.price.replace(/원$/, "")}</span>원
+        <span className="font-bold">{formatWon(line.price)}</span>원
       </p>
     </div>
   );
-}
-
-export function toNumber(price: string) {
-  return Number(price.replace(/[^0-9]/g, ""));
-}
-
-export function formatWon(value: number) {
-  return value.toLocaleString("ko-KR");
 }

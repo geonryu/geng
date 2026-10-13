@@ -22,8 +22,8 @@ const CART_LINES: CartLine[] = [
     imageSrc: "/assets/images/main/product/keycap-keyring.png",
     name: "Player Keycap Keyring",
     option: "CHOVY",
-    originalPrice: "18,000원",
-    price: "16,200원",
+    originalPrice: 18000,
+    price: 16200,
     quantity: 1,
   },
 ];

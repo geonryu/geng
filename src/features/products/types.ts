@@ -4,7 +4,8 @@ import type { ProductSale } from "@/components/ui/product-card";
 export type ShowcaseProduct = {
   id: string;
   title: string;
-  price: string;
+  /** 판매가 (원 단위 정수) */
+  price: number;
   href: string;
   imageSrc: string;
   imageAlt: string;

@@ -89,13 +89,15 @@ const GENRANG_PICKS = [
     id: "genrang-mini-bag-keyring",
     imageSrc: "/assets/images/main/subbanner/genrang-minibag.png",
     title: "GenRang Mini Bag Keyring",
-    price: "25,000원",
+    price: 25000,
+    href: "/products/genrang-mini-bag-keyring",
   },
   {
     id: "genrang-cherry-memo-pad",
     imageSrc: "/assets/images/main/subbanner/genrang-memopad.png",
     title: "GenRang Cherry blossom Memo Pad",
-    price: "8,000원",
+    price: 8000,
+    href: "/products/genrang-cherry-memo-pad",
   },
 ];
 
@@ -124,15 +126,15 @@ const POPULAR_PRODUCTS = [
   {
     id: "player-jacket",
     title: "2026 2nd Official Player Jacket",
-    price: "189,000원",
-    href: "/products/player-jacket",
+    price: 189000,
+    href: "/products/2026-2nd-official-player-jacket",
     imageSrc: "/assets/images/main/popular/jacket.png",
     imageAlt: "2026 2nd Official Player Jacket",
   },
   {
     id: "player-jersey",
     title: "2026 2nd Official Player Jersey",
-    price: "99,000원",
+    price: 99000,
     href: "/products/player-jersey",
     imageSrc: "/assets/images/main/popular/jersey.png",
     imageAlt: "2026 2nd Official Player Jersey",
@@ -140,7 +142,7 @@ const POPULAR_PRODUCTS = [
   {
     id: "marking-lol",
     title: "2026 2nd Official Player Self Marking Kit (LOL)",
-    price: "27,000원",
+    price: 27000,
     href: "/products/marking-kit-lol",
     imageSrc: "/assets/images/main/popular/marking-lol.png",
     imageAlt: "2026 2nd Official Player Self Marking Kit (LOL)",
@@ -149,7 +151,7 @@ const POPULAR_PRODUCTS = [
   {
     id: "marking-val",
     title: "2026 2nd Official Player Self Marking Kit (VAL)",
-    price: "27,000원",
+    price: 27000,
     href: "/products/marking-kit-val",
     imageSrc: "/assets/images/main/popular/marking-val.png",
     imageAlt: "2026 2nd Official Player Self Marking Kit (VAL)",
@@ -158,7 +160,7 @@ const POPULAR_PRODUCTS = [
   {
     id: "jersey-black",
     title: "2026 1st Official Player Jersey (Black)",
-    price: "99,000원",
+    price: 99000,
     href: "/products/jersey-black",
     imageSrc: "/assets/images/main/popular/jersey-black.png",
     imageAlt: "2026 1st Official Player Jersey (Black)",
@@ -178,7 +180,7 @@ const PRODUCT_GRID = [
   {
     id: "keycap-keyring",
     title: "[GenRang x Kumdori] Keycap Keyring(Character)",
-    price: "15,000원",
+    price: 15000,
     href: "/products/keycap-keyring",
     imageSrc: "/assets/images/main/product/keycap-keyring.png",
     imageAlt: "[GenRang x Kumdori] Keycap Keyring",
@@ -187,26 +189,26 @@ const PRODUCT_GRID = [
   {
     id: "libilly-tshirt",
     title: "2024 Gen.G x LIBILLY GenRang Flag T-Shirt",
-    price: "34,300원",
+    price: 34300,
     href: "/products/libilly-tshirt",
     imageSrc: "/assets/images/main/product/libilly-tshirt.png",
     imageAlt: "2024 Gen.G x LIBILLY GenRang Flag T-Shirt",
     titleLines: 2 as const,
-    sale: { rate: "30%", originalPrice: "49,000원" },
+    sale: { originalPrice: 49000 },
   },
   {
     id: "genrang-cushion",
     title: "GenRang Cushion",
-    price: "15,000원",
+    price: 15000,
     href: "/products/genrang-cushion",
     imageSrc: "/assets/images/main/product/genrang-cushion.png",
     imageAlt: "GenRang Cushion",
-    sale: { rate: "40%", originalPrice: "25,000원" },
+    sale: { originalPrice: 25000 },
   },
   {
     id: "ruler-keyring",
     title: "Ruler 10th Anniversary Metal Keyring",
-    price: "25,000원",
+    price: 25000,
     href: "/products/ruler-keyring",
     imageSrc: "/assets/images/main/product/ruler-keyring.png",
     imageAlt: "Ruler 10th Anniversary Metal Keyring",
@@ -215,7 +217,7 @@ const PRODUCT_GRID = [
   {
     id: "basic-socks",
     title: "GEN.G BASIC SOCKS BLACK",
-    price: "5,000원",
+    price: 5000,
     href: "/products/basic-socks",
     imageSrc: "/assets/images/main/product/basic-socks.png",
     imageAlt: "GEN.G BASIC SOCKS BLACK",
@@ -223,7 +225,7 @@ const PRODUCT_GRID = [
   {
     id: "nordvpn-marking-kit",
     title: "2026 Gen.G Self Marking Kit (NordVPN)",
-    price: "5,000원",
+    price: 5000,
     href: "/products/nordvpn-marking-kit",
     imageSrc: "/assets/images/main/product/nordvpn-marking-kit.png",
     imageAlt: "2026 Gen.G Self Marking Kit (NordVPN)",
@@ -232,7 +234,7 @@ const PRODUCT_GRID = [
   {
     id: "lck-cup-keyring",
     title: "2026 LCK CUP Champions Metal Keyring",
-    price: "22,000원",
+    price: 22000,
     href: "/products/lck-cup-keyring",
     imageSrc: "/assets/images/main/product/lck-cup-keyring.png",
     imageAlt: "2026 LCK CUP Champions Metal Keyring",
@@ -241,7 +243,7 @@ const PRODUCT_GRID = [
   {
     id: "genrang-doll-mancity",
     title: "GenRang Doll Keyring(ManCity ver.)",
-    price: "30,000원",
+    price: 30000,
     href: "/products/genrang-doll-mancity",
     imageSrc: "/assets/images/main/product/genrang-doll-mancity.png",
     imageAlt: "GenRang Doll Keyring (ManCity ver.)",
@@ -250,7 +252,7 @@ const PRODUCT_GRID = [
   {
     id: "ruler-tshirt",
     title: "Ruler 10th Anniversary T-Shirt",
-    price: "35,000원",
+    price: 35000,
     href: "/products/ruler-tshirt",
     imageSrc: "/assets/images/main/product/ruler-tshirt.png",
     imageAlt: "Ruler 10th Anniversary T-Shirt",
@@ -258,7 +260,7 @@ const PRODUCT_GRID = [
   {
     id: "ruler-acrylic-stand",
     title: "Ruler 10th Anniversary Acrylic Stand",
-    price: "20,000원",
+    price: 20000,
     href: "/products/ruler-acrylic-stand",
     imageSrc: "/assets/images/main/product/ruler-acrylic-stand.png",
     imageAlt: "Ruler 10th Anniversary Acrylic Stand",
